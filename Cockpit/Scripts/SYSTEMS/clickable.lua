@@ -746,10 +746,12 @@ function SetCommand(command,value)
     if command == device_commands.CLIC_COCKPITLIGHT_F15 then
         dispatch_action(nil,Keys.iCommandPlaneCockpitIllumination)
     end
-    if command == device_commands.CLIC_FIRE and value == 1 then
-        dispatch_action(nil,Keys.iCommandPlanePickleOn)
-    else
-        dispatch_action(nil,Keys.iCommandPlanePickleOff)
+    if command == device_commands.CLIC_FIRE then
+        if value == 1 then
+            dispatch_action(nil,Keys.iCommandPlanePickleOn)
+        else
+            dispatch_action(nil,Keys.iCommandPlanePickleOff)
+        end
     end
     if command == device_commands.CLIC_LANDING_LIGHTS_F15 and value == 1 then
         dispatch_action(nil,Keys.iCommandPlaneHeadLightOnOff)
