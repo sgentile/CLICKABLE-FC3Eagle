@@ -23,7 +23,7 @@ See [INSTALL.md](INSTALL.md) for detailed installation instructions.
 1. Download [OVGME](https://github.com/mguegan/overn/releases)
 2. Copy mod folders from `OVGME/` to your OVGME mod directories
 3. Enable the mods in OVGME
-4. Launch DCS - use **LAlt+C** to toggle clickable mode
+4. Launch DCS
 
 ## Clickable Controls
 
