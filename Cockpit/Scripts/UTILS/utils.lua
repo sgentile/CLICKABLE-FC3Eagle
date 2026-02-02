@@ -2,7 +2,7 @@
 dofile(LockOn_Options.script_path.."devices.lua")
 local 		update_time_step	= 	5 
 make_default_activity(update_time_step)
-local entry = get_dcs_plugin_path("RedK0d Clickable").."\\entry.lua"
+local entry = get_dcs_plugin_path("Clickable-FC3Eagle").."\\entry.lua"
 package.path 					=	package.path
 									.. ';./Scripts/?.lua;'
 									.. './Scripts/Common/?.lua;'
@@ -33,11 +33,11 @@ function 				dev_install()
 dofile(LockOn_Options.script_path.."UTILS\\dev_install.lua")
 end
 check_entry_version()
-optionsEditor.setOption("plugins.RedK0d Clickable.Version",version)
+optionsEditor.setOption("plugins.Clickable-FC3Eagle.Version",version)
 dev_install()
 function post_initialize()
 		TIMER = 20
-		print_message_to_user("[ RedK0d Clickable ] \n[ "..version.." ]\n[ " .. aircraft .." ]",10)
+		print_message_to_user("[ Clickable FC3 Eagle ] \n[ "..version.." ]\n[ " .. aircraft .." ]",10)
 end
 need_to_be_closed = false 
 

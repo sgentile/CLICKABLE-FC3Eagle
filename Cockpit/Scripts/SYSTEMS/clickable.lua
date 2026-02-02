@@ -23,7 +23,7 @@ local   radar_pos_az        =   0
 local   planeradar_timer    =   0
 local   bingo_timer         =   0
 local   null_timer          =   0
-local   mod_version         =   options.plugins["RedK0d Clickable"].Version
+local   mod_version         =   options.plugins["Clickable-FC3Eagle"].Version
 
 dev:listen_command(Keys.iCommandSelecterRight)
 dev:listen_command(Keys.iCommandSelecterLeft)
