@@ -3,3 +3,7 @@
 *.code-workspace
 Cockpit*.edm
 /Source
+
+# Build outputs
+/build/
+/dist/

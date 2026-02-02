@@ -1,33 +1,33 @@
-declare_plugin("RedK0d Clickable",
+declare_plugin("Clickable-FC3Eagle",
 {
 	installed 	  	= 	true,
 	dirName		  	= 	current_mod_path,
-	displayName   	= 	"RedK0d Clickable",
-	shortName	  	= 	"RedK0d Clickable",
-	fileMenuName  	= 	"RedK0d Clickable",
+	displayName   	= 	"Clickable FC3 Eagle",
+	shortName	  	= 	"Clickable-FC3Eagle",
+	fileMenuName  	= 	"Clickable FC3 Eagle",
 	version			=	"v1.1.5",
 	state		  	= 	"installed",
-	developerName 	= 	"RedK0d",
-	info		  	= 	"RedK0d Clickable",
+	developerName 	= 	"RedK0d/SGentile",
+	info		  	= 	"Clickable cockpit mod for F-15C",
 
 	load_immediately = true,
 	Skins	=
 	{
 		{
-			name	= ("RedK0d Clickable"),
+			name	= ("Clickable-FC3Eagle"),
 			dir		= "Skins"
 		},
 	},
 	Options =
 	{
 		{
-			name		= ("RedK0d Clickable"),
-            nameId		= "RedK0d Clickable",
+			name		= ("Clickable FC3 Eagle"),
+            nameId		= "Clickable-FC3Eagle",
             dir			= "Options",
             CLSID		= "{FC3 CLICKABLE}"
 		},
 	},
-	
+
 })
 
 
