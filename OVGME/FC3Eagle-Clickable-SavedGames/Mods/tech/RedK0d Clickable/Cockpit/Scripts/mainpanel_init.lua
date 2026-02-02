@@ -58,6 +58,25 @@ if  aircraft=="F-15C"                       then
     THROTTLE_R_PNTS.input				= {-1,1}
     THROTTLE_R_PNTS.output				= {-1,1}
     THROTTLE_R_PNTS.parameter_name		= "BASE_SENSOR_RIGHT_THROTTLE_POS"
+
+    PSI_CABIN                           = CreateGauge("parameter")
+    PSI_CABIN.arg_number                = 114
+    PSI_CABIN.input                     = {-1.0, 1.0}
+    PSI_CABIN.output                    = {-1.0, 1.0}
+    PSI_CABIN.parameter_name            = "PSI_CABIN"
+
+    PSI_OXY                             = CreateGauge("parameter")
+    PSI_OXY.arg_number                  = 363
+    PSI_OXY.input                       = {-1.0, 1.0}
+    PSI_OXY.output                      = {-1.0, 1.0}
+    PSI_OXY.parameter_name              = "PSI_OXY"
+
+    LIQUID_OXY                          = CreateGauge("parameter")
+    LIQUID_OXY.arg_number               = 376
+    LIQUID_OXY.input                    = {-1.0, 1.0}
+    LIQUID_OXY.output                   = {-1.0, 1.0}
+    LIQUID_OXY.parameter_name           = "LIQUID_OXY"
+
 end
 
 

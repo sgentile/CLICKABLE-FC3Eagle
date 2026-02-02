@@ -5,13 +5,12 @@ declare_plugin("RedK0d Clickable",
 	displayName   	= 	"RedK0d Clickable",
 	shortName	  	= 	"RedK0d Clickable",
 	fileMenuName  	= 	"RedK0d Clickable",
-	version			=	"v1.1.1e-beta",
+	version			=	"v1.1.5",
 	state		  	= 	"installed",
 	developerName 	= 	"RedK0d",
 	info		  	= 	"RedK0d Clickable",
-	
+
 	load_immediately = true,
-	binaries	 = {},
 	Skins	=
 	{
 		{
