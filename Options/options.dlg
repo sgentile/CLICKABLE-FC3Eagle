@@ -16,7 +16,7 @@ dialog = {
 							["x"] = 0,
 							["y"] = 0,
 						},
-						["text"] = "RedK0d Clickable",
+						["text"] = "F-15C Clickable Cockpit",
 						["tooltip"] = "",
 						["visible"] = true,
 						["zindex"] = 0,
@@ -26,228 +26,21 @@ dialog = {
 							["name"] = "staticOptionsTitleSkin",
 						},
 					},
-					["type"] = "Static",		
+					["type"] = "Static",
 				},
-				["Su27_enabledCheckbox"] = {
+				["F15c_enabledCheckbox"] = {
 					["params"] = {
 						["bounds"] = {
 							["h"] = 24,
-							["w"] = 75,
+							["w"] = 150,
 							["x"] = 100,
 							["y"] = 150,
 						},
 						["enabled"] = true,
 						["state"] = true,
 						["tabOrder"] = 0,
-						["text"] = "Su-27",
-						["tooltip"] = "",
-						["visible"] = true,
-						["zindex"] = 0,
-					},
-					["skin"] = {
-						["params"] = {
-							["name"] = "checkBoxSkin_options",
-						},
-					},
-					["type"] = "CheckBox",
-				},
-				["J11a_enabledCheckbox"] = {
-					["params"] = {
-						["bounds"] = {
-							["h"] = 24,
-							["w"] = 75,
-							["x"] = 100,
-							["y"] = 180,
-						},
-						["enabled"] = true,
-						["state"] = true,
-						["tabOrder"] = 0,
-						["text"] = "J-11A",
-						["tooltip"] = "",
-						["visible"] = true,
-						["zindex"] = 0,
-					},
-					["skin"] = {
-						["params"] = {
-							["name"] = "checkBoxSkin_options",
-						},
-					},
-					["type"] = "CheckBox",
-				},
-				["Su33_enabledCheckbox"] = {
-					["params"] = {
-						["bounds"] = {
-							["h"] = 24,
-							["w"] = 75,
-							["x"] = 100,
-							["y"] = 210,
-						},
-						["enabled"] = true,
-						["state"] = true,
-						["tabOrder"] = 0,
-						["text"] = "Su-33",
-						["tooltip"] = "",
-						["visible"] = true,
-						["zindex"] = 0,
-					},
-					["skin"] = {
-						["params"] = {
-							["name"] = "checkBoxSkin_options",
-						},
-					},
-					["type"] = "CheckBox",
-				},
-				["Su25t_enabledCheckbox"] = {
-					["params"] = {
-						["bounds"] = {
-							["h"] = 24,
-							["w"] = 75,
-							["x"] = 100,
-							["y"] = 240,
-						},
-						["enabled"] = true,
-						["state"] = true,
-						["tabOrder"] = 0,
-						["text"] = "Su-25T",
-						["tooltip"] = "",
-						["visible"] = true,
-						["zindex"] = 0,
-					},
-					["skin"] = {
-						["params"] = {
-							["name"] = "checkBoxSkin_options",
-						},
-					},
-					["type"] = "CheckBox",
-				},
-				["Su25_enabledCheckbox"] = {
-					["params"] = {
-						["bounds"] = {
-							["h"] = 24,
-							["w"] = 75,
-							["x"] = 100,
-							["y"] = 270,
-						},
-						["enabled"] = true,
-						["state"] = true,
-						["tabOrder"] = 0,
-						["text"] = "Su-25",
-						["tooltip"] = "",
-						["visible"] = true,
-						["zindex"] = 0,
-					},
-					["skin"] = {
-						["params"] = {
-							["name"] = "checkBoxSkin_options",
-						},
-					},
-					["type"] = "CheckBox",
-				},
-				["Mig29a_enabledCheckbox"] = {
-					["params"] = {
-						["bounds"] = {
-							["h"] = 24,
-							["w"] = 75,
-							["x"] = 100,
-							["y"] = 300,
-						},
-						["enabled"] = true,
-						["state"] = true,
-						["tabOrder"] = 0,
-						["text"] = "MIG-29A",
-						["tooltip"] = "",
-						["visible"] = true,
-						["zindex"] = 0,
-					},
-					["skin"] = {
-						["params"] = {
-							["name"] = "checkBoxSkin_options",
-						},
-					},
-					["type"] = "CheckBox",
-				},
-				["Mig29g_enabledCheckbox"] = {
-					["params"] = {
-						["bounds"] = {
-							["h"] = 24,
-							["w"] = 75,
-							["x"] = 100,
-							["y"] = 330,
-						},
-						["enabled"] = true,
-						["state"] = true,
-						["tabOrder"] = 0,
-						["text"] = "MIG-29G",
-						["tooltip"] = "",
-						["visible"] = true,
-						["zindex"] = 0,
-					},
-					["skin"] = {
-						["params"] = {
-							["name"] = "checkBoxSkin_options",
-						},
-					},
-					["type"] = "CheckBox",
-				},
-				["Mig29s_enabledCheckbox"] = {
-					["params"] = {
-						["bounds"] = {
-							["h"] = 24,
-							["w"] = 75,
-							["x"] = 100,
-							["y"] = 360,
-						},
-						["enabled"] = true,
-						["state"] = true,
-						["tabOrder"] = 0,
-						["text"] = "MIG-29S",
-						["tooltip"] = "",
-						["visible"] = true,
-						["zindex"] = 0,
-					},
-					["skin"] = {
-						["params"] = {
-							["name"] = "checkBoxSkin_options",
-						},
-					},
-					["type"] = "CheckBox",
-				},
-				["A10a_enabledCheckbox"] = {
-					["params"] = {
-						["bounds"] = {
-							["h"] = 24,
-							["w"] = 75,
-							["x"] = 100,
-							["y"] = 390,
-						},
-						["enabled"] = true,
-						["state"] = true,
-						["tabOrder"] = 0,
-						["text"] = "A-10A",
-						["tooltip"] = "",
-						["visible"] = true,
-						["zindex"] = 0,
-					},
-					["skin"] = {
-						["params"] = {
-							["name"] = "checkBoxSkin_options",
-						},
-					},
-					["type"] = "CheckBox",
-				},
-				["F15c_enabledCheckbox"] = {
-					["params"] = {
-						["bounds"] = {
-							["h"] = 24,
-							["w"] = 75,
-							["x"] = 100,
-							["y"] = 420,
-						},
-						["enabled"] = true,
-						["state"] = true,
-						["tabOrder"] = 0,
-						["text"] = "F-15C",
-						["tooltip"] = "",
+						["text"] = "Enable F-15C Clickable",
+						["tooltip"] = "Enable or disable the clickable cockpit mod for F-15C",
 						["visible"] = true,
 						["zindex"] = 0,
 					},
