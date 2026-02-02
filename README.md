@@ -1,14 +1,12 @@
-# RedK0d Clickable
- A partially clickable mod for the FC3 Planes
+# Clickable-FC3Eagle
+ This is a fork from RedK0d's great work to add animations and clickable cockpits for some of the DCS World FC3 modules.   The project was mostly abandoned and my group flies the F-15C exclusively so I wanted to pick this up and support it for the Eagle.   Thanks for RedK0d for starting this and providing the open source code for it !
 
- Supported
- * Su-27  
- * J-11A  
- * Su-33  
- * Su-25T  
- * Su-25  
- * A-10A  
- * F-15C   
+ reference: https://github.com/RedK0d/CLICKABLE-FC3
+
+# FC3Eagle Clickable
+ A partially clickable mod for the FC3 F-15C.
+
+ Todo: validate these instructions
 
  # INSTALLATION 
 
@@ -30,29 +28,5 @@
 * __Step 6:__ Click Apply  
 * __Step 7:__ Depending if you have Standalone F-15C or FC3 highlight "F-15C Standalone" or "F-15C With FC3" and click "Install" or "Unistall" if you want to install or uninstall.  
 * __Step 8:__ Fly  
- 
- # SUPPORT US
-3 ways to support us 
-
-* [Our Store](https://redk0d.gumroad.com/l/fvkodo)   
-
-* [Patreon](https://www.patreon.com/RedK0d)   
-
-* [Paypal](https://www.paypal.com/donate/?hosted_button_id=8RA626VEJD2SC)   
-
- # DISCORD
-Join us on [Discord](https://discord.com/invite/CrExr87dP9)
-
- # SPECIAL THANKS
- * __Tobsen__                               (Edm Exporter for Blender)  
- * __Grim Reapers,MatAWG and Sklang__       (YouTube content creators)  
- * __Aether,ImAPanzer and Emerald 467__     (For Discord Management)  
- * __CrunchZ08__                            (For his information on the F-15C systems)  
- * __Emerald 467 deadlyfishes and snowman__ (For tests and feedback)  
- * __Zeitgeist__                            (LowFidelityAircraftManual)  
- * __denissoliveira__                       (Help Images)  
- 
- 
- * __And for you all__                      (For your interest in this mod)  
 
 
