@@ -41,19 +41,7 @@ mount_vfs_model_path    (current_mod_path ..  "/Shapes")
 		
 add_plugin_systems('CLICKABLE-FC3_Module','*',path,
 	{
-	
-	--Alpha Implemented
-	["J-11A"] 					= {enable_options_key_for_unit = 'J11a_enabled'},
-	["Su-27"] 					= {enable_options_key_for_unit = 'Su27_enabled'},
-	["Su-33"] 					= {enable_options_key_for_unit = 'Su33_enabled'},
-	["Su-25T"] 					= {enable_options_key_for_unit = 'Su25t_enabled'},
-	["MiG-29A"] 				= {enable_options_key_for_unit = 'Mig29a_enabled'},
-	["MiG-29G"] 				= {enable_options_key_for_unit = 'Mig29g_enabled'},
-	["MiG-29S"] 				= {enable_options_key_for_unit = 'Mig29s_enabled'},
-	["Su-25"] 					= {enable_options_key_for_unit = 'Su25_enabled'},
-	["A-10A"]					= {enable_options_key_for_unit = 'A10a_enabled'},
 	["F-15C"]					= {enable_options_key_for_unit = 'F15c_enabled'},
-	["TEST"]					= {enable_options_key_for_unit = 'Version'},
 	}
 )
 

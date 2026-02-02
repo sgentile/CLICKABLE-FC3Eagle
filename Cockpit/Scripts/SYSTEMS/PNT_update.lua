@@ -1,6 +1,5 @@
 dt = 0.0001
 make_default_activity(dt)
-local  aircraft = get_aircraft_type()
 
 
 

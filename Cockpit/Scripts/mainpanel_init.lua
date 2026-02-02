@@ -1,24 +1,8 @@
 dofile(LockOn_Options.script_path.."dump.lua")
 local  aircraft = get_aircraft_type()
 
-if      aircraft=="Su-27"or aircraft=="J-11A"   then
-    shape_name		   = "SU-27-CLICKABLE"
-elseif  aircraft=="Su-33"                       then
-    shape_name		   = "SU-33-CLICKABLE"
-elseif  aircraft=="Su-25T"                       then
-    shape_name		   = "SU-25T-CLICKABLE"
-elseif  aircraft=="Su-25"                       then
-    shape_name		   = "SU-25-CLICKABLE"
-elseif  aircraft=="MiG-29A"or aircraft=="MiG-29G"or aircraft=="MiG-29S"      then
-    shape_name		   = "MIG-29-CLICKABLE"
-elseif  aircraft=="A-10A"                       then
-    shape_name		   = "A-10A-CLICKABLE"
-elseif  aircraft=="VSN_MirageIIIC"                       then
-    shape_name		   = "F-15C-CLICKABLE"
-elseif  aircraft=="VSN_MirageIIIS"                       then
-    shape_name		   = "F-15C-CLICKABLE"
-elseif  aircraft=="F-15C"                       then
-    shape_name		   = "F-15C-CLICKABLE"
+if aircraft == "F-15C" then
+    shape_name = "F-15C-CLICKABLE"
 end
 
 

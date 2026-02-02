@@ -58,38 +58,19 @@ function post_initialize()
 	
 
 end
-function detect_rusian_air_to_air(aircraft)
-    
-    
-    if aircraft=="Su-33" or aircraft=="Su-27"or aircraft=="J-11A" or aircraft=="MiG-29A"or aircraft=="MiG-29G"or aircraft=="MiG-29S" then
-    return true
+
+
+
+
+function reset_mastermode(mastermode)
+    local max_mastermode = 3
+    if mastermode > max_mastermode then
+        return 2
+    elseif mastermode <= 1 then
+        return 1
     else
-    return false
+        return mastermode
     end
-    
-end
-
-
-
-
-function reset_mastermode(mastermode,AA)
-    local   max_mastermode  = 3
-        if AA == true then
-            max_mastermode  = 7
-        end
-                
-        if mastermode >max_mastermode then
-               
-    
-                return 2
-            elseif mastermode <=1 then 
-                return 1
-            else    
-                return mastermode
-        end
-    
-        
-    
 end
 
 function reset_mastermodeF15(mastermodeF15)
@@ -132,10 +113,6 @@ dev:listen_command(LMFD_OSB_01)
 
 
 function SetCommand(command,value)
-
-    
-    
-    local AA    = detect_rusian_air_to_air(aircraft)
 
     if command == device_commands.CLIC_COM_R  then
         dispatch_action(true,Keys.iCommandToggleReceiveMode)
@@ -271,7 +248,7 @@ function SetCommand(command,value)
         mastermode = mastermode -1
         
     end
-    mastermode = reset_mastermode(mastermode,AA)
+    mastermode = reset_mastermode(mastermode)
    
 
     if command == device_commands.CLIC_MODE_AA  and value ==1 then
@@ -312,44 +289,22 @@ function SetCommand(command,value)
 
 
     if command == device_commands.CLIC_MODE then
-        
-
-        if AA == true then
-            
-            if      mastermode == 2 then
-            dispatch_action(nil,Keys.iCommandPlaneModeBVR)
-            elseif  mastermode == 3 then
-            dispatch_action(nil,Keys.iCommandPlaneModeVS)
-            elseif  mastermode == 4 then
-            dispatch_action(nil,Keys.iCommandPlaneModeBore)
-            elseif  mastermode == 5 then
-            dispatch_action(nil,Keys.iCommandPlaneModeHelmet)
-            elseif  mastermode == 6 then
+        if mastermode == 2 then
             dispatch_action(nil,Keys.iCommandPlaneModeFI0)
-            elseif  mastermode == 7 then
+        elseif mastermode == 3 then
             dispatch_action(nil,Keys.iCommandPlaneModeGround)
-            end      
-        else 
-            
-            if      mastermode == 2 then
-                dispatch_action(nil,Keys.iCommandPlaneModeFI0)
-            elseif  mastermode == 3 then
-                dispatch_action(nil,Keys.iCommandPlaneModeGround)
-            end 
-            if command == device_commands.CLIC_LASER and  value ==1  then
-                dispatch_action(nil, Keys.iCommandPlaneLaserRangerOnOff)
-            end
-            if command == device_commands.CLIC_TV_NIGHT and  value == 1 then
-                dispatch_action(nil, Keys.iCommandPlaneNightTVOnOff)
-            end
-            if command == device_commands.CLIC_ZOOM and value >0 then
-                dispatch_action(nil,Keys.iCommandPlaneZoomIn)
-            elseif command == device_commands.CLIC_ZOOM and  value <0 then
-                dispatch_action(nil,Keys.iCommandPlaneZoomOut) 
-            end
         end
-
-
+        if command == device_commands.CLIC_LASER and value == 1 then
+            dispatch_action(nil, Keys.iCommandPlaneLaserRangerOnOff)
+        end
+        if command == device_commands.CLIC_TV_NIGHT and value == 1 then
+            dispatch_action(nil, Keys.iCommandPlaneNightTVOnOff)
+        end
+        if command == device_commands.CLIC_ZOOM and value > 0 then
+            dispatch_action(nil,Keys.iCommandPlaneZoomIn)
+        elseif command == device_commands.CLIC_ZOOM and value < 0 then
+            dispatch_action(nil,Keys.iCommandPlaneZoomOut)
+        end
     end
     if command == device_commands.CLIC_LASER and  value ==1  then
         dispatch_action(nil, Keys.iCommandPlaneLaserRangerOnOff)
@@ -358,33 +313,9 @@ function SetCommand(command,value)
     if command == device_commands.CLIC_CHUTE        and  value == 1 then
         dispatch_action(nil,Keys.iCommandPlaneParachute)
     end
-    --Two-button parachute control
-    if aircraft=="Su-27"or aircraft=="J-11A" or aircraft=="MiG-29A"or aircraft=="MiG-29G"or aircraft=="MiG-29S" or aircraft=="Su-25T" then
-        
-        if command == device_commands.CLIC_CHUTE_DEP then	
-            if value == 1 then
-                if chutestate == 0 then
-                    dispatch_action(true, Keys.iCommandPlaneParachute)
-                    chutestate = 1
-                end
-            end
-        elseif command == device_commands.CLIC_CHUTE_REL then	
-            if value == 1 then
-                if chutestate == 1 then
-                    dispatch_action(true, Keys.iCommandPlaneParachute)
-                    chutestate = -1
-                end
-            end
-        end
-
-    end
-    
-    if  (aircraft ~= "MiG-29A" or aircraft ~="MiG-29G" or aircraft~="MiG-29S") and command == device_commands.CLIC_RADAR_FREQ  and  value == 1 then
+    if command == device_commands.CLIC_RADAR_FREQ and value == 1 then
         dispatch_action(nil,Keys.iCommandPlaneChangeRadarPRF)
     end
-    if  (aircraft == "MiG-29A" or aircraft =="MiG-29G" or aircraft=="MiG-29S") and command == device_commands.CLIC_RADAR_FREQ   then
-        dispatch_action(nil,Keys.iCommandPlaneChangeRadarPRF)
-    end 
 
     
     if command == device_commands.CLIC_FLAPS_MULTI and  value == 1 then
@@ -718,64 +649,6 @@ function SetCommand(command,value)
     end
 
 
-    --Brake control specific to Flankers and derivatives
-    if aircraft=="Su-33" or aircraft=="Su-27"or aircraft=="J-11A" then
-
-        
-
-        if command == device_commands.CLIC_EMER_BRAKE and value == 1 then
-            dispatch_action(nil,Keys.iCommandPlaneWheelParkingBrake)
-            
-        end
-    end
-    --Su-33 Specifics   
-    if aircraft=="Su-33" then
-        if command == device_commands.CLIC_AUTOTHRUST and value == 1 then
-            dispatch_action(nil,Keys.iCommandPlaneAUTOnOff)
-            
-        end
-
-        if command == device_commands.CLIC_AUTOTHRUST_I and value == 1 then
-            dispatch_action(0,Keys.iCommandPlaneAUTIncrease,1.0)
-        elseif value == 0 then
-            dispatch_action(0,Keys.iCommandPlaneAUTIncrease,0.0)
-                
-            
-        end
-
-        if command == device_commands.CLIC_AUTOTHRUST_D and value == 1 then
-            dispatch_action(0,Keys.iCommandPlaneAUTIncrease,-1.0)
-        elseif value == 0 then
-            dispatch_action(0,Keys.iCommandPlaneAUTIncrease,0.0)
-            
-        end
-
-        if command == device_commands.CLIC_ASC_REFUEL and value == 1 then
-            dispatch_action(nil,Keys.iCommandPlane_ADF_Mode_change)
-            
-        end
-
-        if command == device_commands.CLIC_AFTERURN_S and value == 1 then
-            dispatch_action(nil,Keys.iCommandPlane_P_51_WarEmergencyPower)
-            
-        end
-
-        if command == device_commands.CLIC_RLIGHTS and value == 1 then
-            dispatch_action(nil,Keys.iCommandPlane_ADF_Test)
-            
-        end
-
-        if command == device_commands.CLIC_TAILHOOK and value == 1 then
-            dispatch_action(nil,Keys.iCommandPlaneHook)
-            
-        end
-
-        if command == device_commands.CLIC_WINGSF and value == 1 then
-            dispatch_action(nil,Keys.iCommandPlanePackWing)
-            
-        end
-    end
-    
 
     if command == device_commands.CLIC_RIPPLE_INT  and  value >0 then
         dispatch_action(nil,Keys.iCommandChangeRippleInterval)
@@ -853,113 +726,88 @@ function SetCommand(command,value)
         dispatch_action(nil,Keys.iCommandPlaneLaunchPermissionOverride)
         print_message_to_user("Launch Permission Override")
     end
-    --F-15C Specifics
-    if aircraft=="F-15C" then
-
-                if  command     ==  device_commands.CLIC_CTM_F15        and value == 1 then 
-                    dispatch_action(nil,CMD_ONOFF)     
-                        --print_message_to_user("CTM_F15")  
-                end
-                if  command  == device_commands.CLIC_COL_LIGHTS     and 
-                    value    == 1                                   then
-                                dispatch_action(nil,Keys.iCommandPlaneAntiCollisionLights)              
-                end
-                if command == device_commands.CLIC_TAKEOFFTRIMF15  then
-                    if      value == 1 then
-                            dispatch_action(nil,Keys.iCommandPlaneTrimOn)
-                    elseif  value == 0 then
-                            dispatch_action(nil,Keys.iCommandPlaneTrimOff)
-                    end
-                        
-                end
-                
-                if command == device_commands.CLIC_HUD_COLOR_F15  then
-                    dispatch_action(nil,Keys.iCommandBrightnessILS)              
-                end
-                if command == device_commands.CLIC_COCKPITLIGHT_F15    then  
-                dispatch_action(nil,Keys.iCommandPlaneCockpitIllumination) 
-                end
-                if command == device_commands.CLIC_FIRE and value == 1 then
-                    dispatch_action(nil,Keys.iCommandPlanePickleOn)
-                else
-                    dispatch_action(nil,Keys.iCommandPlanePickleOff)
-                end
-
-                if command == device_commands.CLIC_LANDING_LIGHTS_F15 and value == 1 then
-                    dispatch_action(nil,Keys.iCommandPlaneHeadLightOnOff)   
-                end  
-
-                if command ==  device_commands.CLIC_BINGO then
-                    bingo_timer = 0.25
-
-                    if  value ==-1  then 
-                        dispatch_action(0,Keys.iCommandPlaneFSQuantityIndicatorSelectorINT,-1)   
-                    elseif  value ==1  then
-                        dispatch_action(0,Keys.iCommandPlaneFSQuantityIndicatorSelectorINT,1) 
-                    end
-                end
-                
-            end
-            -- Master Combat Mode Controls
-            -- To be reworked to implement the Navigation mod which has two sub mods, which causes problems.
-                if command == device_commands.CLIC_MODE_F15  and  value >0 then
-                    mastermodeF15 = mastermodeF15 +1
-                    
-                elseif  command == device_commands.CLIC_MODE_F15  and  value <0 then
-                    mastermodeF15 = mastermodeF15 -1
-                    
-                end
-                if command == device_commands.CLIC_MODE_F15 then
-                    if          mastermodeF15 == 2 then
-                        dispatch_action(nil,Keys.iCommandPlaneModeBVR)
-                        elseif  mastermodeF15 == 3 then
-                        dispatch_action(nil,Keys.iCommandPlaneModeVS)
-                        elseif  mastermodeF15 == 4 then
-                        dispatch_action(nil,Keys.iCommandPlaneModeBore)
-                        elseif  mastermodeF15 == 5 then
-                        dispatch_action(nil,Keys.iCommandPlaneModeFI0)
-                    end 
-                mastermodeF15 = reset_mastermodeF15(mastermodeF15)
-                end
-           
-            
-
-                     
-            
-    
-    
-        
-    
-            --Radar Controls
-                if command == device_commands.CLIC_ZOOM_F15 and value >0 then
-                    dispatch_action(nil,Keys.iCommandPlaneZoomIn)
-                elseif command == device_commands.CLIC_ZOOM_F15 and  value <0 then
-                    dispatch_action(nil,Keys.iCommandPlaneZoomOut) 
-                end
-                if command == device_commands.CLIC_RADAR_FREQ_F15 then
-                    dispatch_action(nil,Keys.iCommandPlaneChangeRadarPRF)
-                end
-                if command == device_commands.CLIC_RADAR_ON_OFF_F15  then  
-                    dispatch_action(nil,Keys.iCommandPlaneRadarOnOff) 
-                end
-                if command == device_commands.CLIC_RADAR_AZ and value >0 then
-
-                    radarScanAreaf15 = radarScanAreaf15 +1
-                    
-                elseif command == device_commands.CLIC_RADAR_AZ and  value <0 then
-                    radarScanAreaf15 = radarScanAreaf15 -1
-                     
-                end
-                if command == device_commands.CLIC_RADAR_AZ then
-                    if      radarScanAreaf15    ==  1 then
-                        dispatch_action(nil,Keys.iCommandIncreaseRadarScanArea)                 
-                    elseif  radarScanAreaf15    ==  0 then
-                        dispatch_action(nil,Keys.iCommandDecreaseRadarScanArea) 
-                    end
-                end
-            radarScanAreaf15 = reset_radarScanAreaf15(radarScanAreaf15)
-            
+    -- F-15C Specifics
+    if command == device_commands.CLIC_CTM_F15 and value == 1 then
+        dispatch_action(nil,CMD_ONOFF)
     end
+    if command == device_commands.CLIC_COL_LIGHTS and value == 1 then
+        dispatch_action(nil,Keys.iCommandPlaneAntiCollisionLights)
+    end
+    if command == device_commands.CLIC_TAKEOFFTRIMF15 then
+        if value == 1 then
+            dispatch_action(nil,Keys.iCommandPlaneTrimOn)
+        elseif value == 0 then
+            dispatch_action(nil,Keys.iCommandPlaneTrimOff)
+        end
+    end
+    if command == device_commands.CLIC_HUD_COLOR_F15 then
+        dispatch_action(nil,Keys.iCommandBrightnessILS)
+    end
+    if command == device_commands.CLIC_COCKPITLIGHT_F15 then
+        dispatch_action(nil,Keys.iCommandPlaneCockpitIllumination)
+    end
+    if command == device_commands.CLIC_FIRE and value == 1 then
+        dispatch_action(nil,Keys.iCommandPlanePickleOn)
+    else
+        dispatch_action(nil,Keys.iCommandPlanePickleOff)
+    end
+    if command == device_commands.CLIC_LANDING_LIGHTS_F15 and value == 1 then
+        dispatch_action(nil,Keys.iCommandPlaneHeadLightOnOff)
+    end
+    if command == device_commands.CLIC_BINGO then
+        bingo_timer = 0.25
+        if value == -1 then
+            dispatch_action(0,Keys.iCommandPlaneFSQuantityIndicatorSelectorINT,-1)
+        elseif value == 1 then
+            dispatch_action(0,Keys.iCommandPlaneFSQuantityIndicatorSelectorINT,1)
+        end
+    end
+
+    -- Master Combat Mode Controls
+    if command == device_commands.CLIC_MODE_F15 and value > 0 then
+        mastermodeF15 = mastermodeF15 + 1
+    elseif command == device_commands.CLIC_MODE_F15 and value < 0 then
+        mastermodeF15 = mastermodeF15 - 1
+    end
+    if command == device_commands.CLIC_MODE_F15 then
+        if mastermodeF15 == 2 then
+            dispatch_action(nil,Keys.iCommandPlaneModeBVR)
+        elseif mastermodeF15 == 3 then
+            dispatch_action(nil,Keys.iCommandPlaneModeVS)
+        elseif mastermodeF15 == 4 then
+            dispatch_action(nil,Keys.iCommandPlaneModeBore)
+        elseif mastermodeF15 == 5 then
+            dispatch_action(nil,Keys.iCommandPlaneModeFI0)
+        end
+        mastermodeF15 = reset_mastermodeF15(mastermodeF15)
+    end
+
+    -- Radar Controls
+    if command == device_commands.CLIC_ZOOM_F15 and value > 0 then
+        dispatch_action(nil,Keys.iCommandPlaneZoomIn)
+    elseif command == device_commands.CLIC_ZOOM_F15 and value < 0 then
+        dispatch_action(nil,Keys.iCommandPlaneZoomOut)
+    end
+    if command == device_commands.CLIC_RADAR_FREQ_F15 then
+        dispatch_action(nil,Keys.iCommandPlaneChangeRadarPRF)
+    end
+    if command == device_commands.CLIC_RADAR_ON_OFF_F15 then
+        dispatch_action(nil,Keys.iCommandPlaneRadarOnOff)
+    end
+    if command == device_commands.CLIC_RADAR_AZ and value > 0 then
+        radarScanAreaf15 = radarScanAreaf15 + 1
+    elseif command == device_commands.CLIC_RADAR_AZ and value < 0 then
+        radarScanAreaf15 = radarScanAreaf15 - 1
+    end
+    if command == device_commands.CLIC_RADAR_AZ then
+        if radarScanAreaf15 == 1 then
+            dispatch_action(nil,Keys.iCommandIncreaseRadarScanArea)
+        elseif radarScanAreaf15 == 0 then
+            dispatch_action(nil,Keys.iCommandDecreaseRadarScanArea)
+        end
+    end
+    radarScanAreaf15 = reset_radarScanAreaf15(radarScanAreaf15)
+end
 
 
  
