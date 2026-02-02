@@ -17,7 +17,6 @@ package.path 					=	package.path
 local   	TIMER              	=   0
 local 		optionsEditor 		= 	require('optionsEditor')
 local 		update_time_step 	= 	5 
-local 		F15c_extended 		= 	get_plugin_option_value("RedK0d Clickable", "F15c_extended", "local")
 local 		version
 local 		aircraft 			= get_aircraft_type()
 function check_entry_version()

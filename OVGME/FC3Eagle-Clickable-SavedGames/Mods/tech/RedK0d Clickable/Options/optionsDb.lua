@@ -23,7 +23,6 @@ return {
 		useit	 		= DbOption.new():setValue(true),
 		dontuseit 		= DbOption.new():setValue(false),
 		F15c_enabled	= DbOption.new():setValue(true):checkbox(),
-		F15c_extended	= DbOption.new():setValue(0),
 		Version			= DbOption.new():setValue(0),
 		}
 
