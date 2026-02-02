@@ -1,0 +1,855 @@
+
+dofile(LockOn_Options.script_path.."devices.lua")
+dofile(LockOn_Options.script_path.."command_defs.lua")
+dofile(LockOn_Options.script_path.."utils.lua")
+dofile(LockOn_Options.script_path.."dump.lua")
+dofile(lfs.writedir().."Config\\options.lua")
+
+
+local update_time_step = 0.02 --update will be called 50 times per second
+make_default_activity(update_time_step) 
+sensor_data = get_base_data()
+local dev = GetSelf()
+local aircraft = get_aircraft_type()
+       
+--------------------------------------------------------------------
+--Variable declaration
+local   mastermode          =   0
+local   mastermodeF15       =   0
+local   radarScanAreaf15    =   1
+local   selecter_timer      =   0
+local   selecter_rcl        =   0     
+local   radar_pos_az        =   0   
+local   planeradar_timer    =   0
+local   bingo_timer         =   0
+local   null_timer          =   0
+local   mod_version         =   options.plugins["RedK0d Clickable"].Version
+
+dev:listen_command(Keys.iCommandSelecterRight)
+dev:listen_command(Keys.iCommandSelecterLeft)
+dev:listen_command(Keys.iCommandPlaneWingtipSmokeOnOff)
+
+
+local chutestate 
+local CLIC_MODE_AA_COUNTER
+local CLIC_MODE_QUICK_COUNTER 
+local CMD_ONOFF    = 10000
+--------------------------------------------------------------------
+local CLIC_EMERGENCY_BRAKES     =   get_param_handle("CLIC_EMERGENCY_BRAKES")
+local CTM_F15                   =   get_param_handle("CTM_F15")
+
+
+
+
+function post_initialize()
+    --print_message_to_user(mod_version)
+    --print_message_to_user(aircraft,10)
+    dispatch_action(nil,Keys.iCommandCockpitClickModeOnOff) 
+    chutestate              = 0
+    CLIC_MODE_AA_COUNTER    = 0
+    CLIC_MODE_QUICK_COUNTER = 0
+
+	local birth = LockOn_Options.init_conditions.birth_place
+    --dump("_G", getmetatable(_G))
+    if birth=="GROUND_HOT" or birth=="AIR_HOT" then
+    elseif birth=="GROUND_COLD" then
+    end
+
+	
+
+end
+
+
+
+
+function reset_mastermode(mastermode)
+    local max_mastermode = 3
+    if mastermode > max_mastermode then
+        return 2
+    elseif mastermode <= 1 then
+        return 1
+    else
+        return mastermode
+    end
+end
+
+function reset_mastermodeF15(mastermodeF15)
+    local   max_mastermodeF15  = 5
+                
+        if mastermodeF15 >max_mastermodeF15 then
+               
+    
+                return 2
+            elseif mastermodeF15 <2 then 
+                return 2
+            else    
+                return mastermodeF15
+        end
+    
+        
+    
+end
+
+function reset_radarScanAreaf15(radarScanAreaf15)
+    local   max_radarScanAreaf15  = 1
+                
+        if radarScanAreaf15 >max_radarScanAreaf15 then
+               
+    
+                return 1
+            elseif radarScanAreaf15 <0 then 
+                return 0
+            else    
+                return radarScanAreaf15
+        end
+    
+        
+    
+end   
+
+
+local LMFD_OSB_01 = 10000
+dev:listen_command(LMFD_OSB_01)
+
+
+function SetCommand(command,value)
+
+    if command == device_commands.CLIC_COM_R  then
+        dispatch_action(true,Keys.iCommandToggleReceiveMode)
+        
+    end
+    
+    if command == device_commands.CLIC_COM  and value == 1 then
+        dispatch_action(true,Keys.iCommandToggleCommandMenu)
+        
+    end
+
+    if command == device_commands.CLIC_RBOOM and value == 1 then
+        dispatch_action(nil,Keys.iCommandPlaneAirRefuel)
+        
+    end
+
+    if command == device_commands.CLIC_WHEELBRAKE   then  
+        dispatch_action(nil,Keys.iCommandPlaneWheelBrakeOn) 
+        if value ~=1 then
+            dispatch_action(nil,Keys.iCommandPlaneWheelBrakeOff)	
+        end
+    end
+    
+
+    if command == device_commands.CLIC_GRID and value == 1 then
+        dispatch_action(nil,Keys.iCommandPlaneModeGrid)
+        
+    end
+
+    
+    if command == device_commands.CLIC_ASP and value >0 then
+        dispatch_action(0,Keys.iCommandPlaneHUDFilterOnOff,-1.0)
+    end
+    if command == device_commands.CLIC_ASP and value <0 then
+        dispatch_action(0,Keys.iCommandPlaneHUDFilterOnOff,1.0)
+    end
+    if command == device_commands.CLIC_TRIM_L   then 
+        dispatch_action(nil,Keys.iCommandPlaneTrimLeft)
+        if value ~=1 then
+        dispatch_action(nil,Keys.iCommandPlaneTrimStop)	
+        end
+    end
+    if command == device_commands.CLIC_TRIM_R   then 
+        dispatch_action(nil,Keys.iCommandPlaneTrimRight)
+        if value ~=1 then
+        dispatch_action(nil,Keys.iCommandPlaneTrimStop)	
+        end
+    end
+    if command == device_commands.CLIC_TRIM_U   then 
+        dispatch_action(nil,Keys.iCommandPlaneTrimDown)
+        if value ~=1 then
+        dispatch_action(nil,Keys.iCommandPlaneTrimStop)	
+        end
+    end
+    if command == device_commands.CLIC_TRIM_D   then 
+        dispatch_action(nil,Keys.iCommandPlaneTrimUp)
+        if value ~=1 then
+        dispatch_action(nil,Keys.iCommandPlaneTrimStop)	
+        end
+    end
+
+
+   
+    if command == device_commands.CLIC_TGT_L   then 
+        dispatch_action(nil,Keys.iCommandPlaneRadarLeft)
+        if value ~=1 then
+        dispatch_action(nil,Keys.iCommandPlaneRadarStop)	
+        end
+    end
+
+    if command == device_commands.CLIC_TGT_R   then  
+        dispatch_action(nil,Keys.iCommandPlaneRadarRight) 
+        if value ~=1 then
+            dispatch_action(nil,Keys.iCommandPlaneRadarStop)	
+        end
+    end
+
+    if command == device_commands.CLIC_TGT_U   then  
+        dispatch_action(nil,Keys.iCommandPlaneRadarUp) 
+        if value ~=1 then
+            dispatch_action(nil,Keys.iCommandPlaneRadarStop)	
+        end
+    end
+    
+    if command == device_commands.CLIC_TGT_C and value ==1 then
+            dispatch_action(nil,Keys.iCommandPlaneRadarCenter)	
+    end
+
+    if command == device_commands.CLIC_TGT_D   then  
+        dispatch_action(nil,Keys.iCommandPlaneRadarDown) 
+        if value ~=1 then
+            dispatch_action(nil,Keys.iCommandPlaneRadarStop)	
+        end
+    end
+
+    if command == device_commands.CLIC_NAVMODES and value ~=0 then
+        dispatch_action(nil,Keys.iCommandPlaneModeNAV)
+    end
+
+
+    if command ==  device_commands.CLIC_STATION and value == 1  then
+        dispatch_action(nil,Keys.iCommandPlaneChangeWeapon) 
+    end 
+
+    if command ==  device_commands.CLIC_LOCK and value == 1  then
+        dispatch_action(nil,Keys.iCommandPlaneChangeLock) 
+    end 
+
+    if command ==  device_commands.CLIC_LOCK_REL and value == 1  then
+        dispatch_action(nil,Keys.iCommandSensorReset) 
+    end  
+
+    if command ==  device_commands.CLIC_CTM_ONCE and value == 1  then
+        dispatch_action(nil,Keys.iCommandPlaneDropSnarOnce) 
+    end    
+
+    if command ==  device_commands.CLIC_AIRBRAKE and value == 1  then
+        dispatch_action(nil,Keys.iCommandPlaneAirBrake) 
+    end
+
+    if command ==  device_commands.CLIC_WAYPOINT and  value >0 then
+        dispatch_action(nil,Keys.iCommandPlaneChangeTarget) 
+        print_message_to_user("Next Waypoint, Airfield Or Target")
+    elseif command ==  device_commands.CLIC_WAYPOINT and  value <0 then
+        dispatch_action(nil,Keys.iCommandPlaneUFC_STEER_DOWN) 
+        print_message_to_user("Previous Waypoint, Airfield Or Target")
+    end
+
+    if command == device_commands.CLIC_MODE  and  value >0 then
+        mastermode = mastermode +1
+        
+    elseif  command == device_commands.CLIC_MODE  and  value <0 then
+        mastermode = mastermode -1
+        
+    end
+    mastermode = reset_mastermode(mastermode)
+   
+
+    if command == device_commands.CLIC_MODE_AA  and value ==1 then
+        CLIC_MODE_AA_COUNTER = CLIC_MODE_AA_COUNTER +1
+        if mastermode == 8 then
+            dispatch_action(nil,Keys.iCommandPlaneModeGrid)
+            
+        end
+        mastermode = 0
+
+        if CLIC_MODE_AA_COUNTER == 1 then
+            dispatch_action(nil,Keys.iCommandPlaneModeBVR)
+        end
+        if CLIC_MODE_AA_COUNTER == 2 then
+            dispatch_action(nil,Keys.iCommandPlaneModeVS)
+            CLIC_MODE_AA_COUNTER = 0
+        end
+        
+    end
+
+    if command == device_commands.CLIC_MODE_QUICK  and value ==1 then
+        CLIC_MODE_QUICK_COUNTER = CLIC_MODE_QUICK_COUNTER +1
+        if mastermode == 6 then
+            dispatch_action(nil,Keys.iCommandPlaneModeGrid)
+            
+        end
+        mastermode = 0
+
+        if CLIC_MODE_QUICK_COUNTER == 1 then
+            dispatch_action(nil,Keys.iCommandPlaneModeFI0)
+        end
+        if CLIC_MODE_QUICK_COUNTER == 2 then
+            dispatch_action(nil,Keys.iCommandPlaneModeGround)
+            CLIC_MODE_QUICK_COUNTER = 0
+        end
+        
+    end
+
+
+    if command == device_commands.CLIC_MODE then
+        if mastermode == 2 then
+            dispatch_action(nil,Keys.iCommandPlaneModeFI0)
+        elseif mastermode == 3 then
+            dispatch_action(nil,Keys.iCommandPlaneModeGround)
+        end
+        if command == device_commands.CLIC_LASER and value == 1 then
+            dispatch_action(nil, Keys.iCommandPlaneLaserRangerOnOff)
+        end
+        if command == device_commands.CLIC_TV_NIGHT and value == 1 then
+            dispatch_action(nil, Keys.iCommandPlaneNightTVOnOff)
+        end
+        if command == device_commands.CLIC_ZOOM and value > 0 then
+            dispatch_action(nil,Keys.iCommandPlaneZoomIn)
+        elseif command == device_commands.CLIC_ZOOM and value < 0 then
+            dispatch_action(nil,Keys.iCommandPlaneZoomOut)
+        end
+    end
+    if command == device_commands.CLIC_LASER and  value ==1  then
+        dispatch_action(nil, Keys.iCommandPlaneLaserRangerOnOff)
+    end
+    --One-button parachute control
+    if command == device_commands.CLIC_CHUTE        and  value == 1 then
+        dispatch_action(nil,Keys.iCommandPlaneParachute)
+    end
+    if command == device_commands.CLIC_RADAR_FREQ and value == 1 then
+        dispatch_action(nil,Keys.iCommandPlaneChangeRadarPRF)
+    end
+
+    
+    if command == device_commands.CLIC_FLAPS_MULTI and  value == 1 then
+        dispatch_action(nil,Keys.iCommandPlaneFlaps)
+    end 
+    if command == device_commands.CLIC_FLAPS_UP then
+        dispatch_action(nil,Keys.iCommandPlaneFlapsOff)    
+    end 
+             
+    if command == device_commands.CLIC_FLAPS_DOWN or command == device_commands.CLIC_FLAPS_LAND then
+    dispatch_action(nil,Keys.iCommandPlaneFlapsOn)    
+    end         
+    if command == device_commands.CLIC_LANDING_LIGHTS and value ==1 then
+    dispatch_action(nil,Keys.iCommandPlaneHeadLightOnOff)   
+    end   
+    
+    if command == device_commands.CLIC_ASC_DC and value ==1 then
+        dispatch_action(nil,Keys.iCommandPlaneCobra)   
+    end    
+    if command == device_commands.CLIC_FUEL_DUMP_ON  then
+        dispatch_action(nil,Keys.iCommandPlaneFuelOn)
+    end
+    if command == device_commands.CLIC_FUEL_DUMP_OFF      then
+        dispatch_action(nil,Keys.iCommandPlaneFuelOff)
+    end  
+    if command == device_commands.CLIC_AUTO_GCA and value == 1 then
+        dispatch_action(nil,Keys.iCommandPlaneSAUHRadio)
+        
+    end
+    if command == device_commands.CLIC_AUTO_PATH and value == 1 then
+        dispatch_action(nil,Keys.iCommandPlaneRouteAutopilot)
+        
+    end
+    if command == device_commands.CLIC_AUTO_REAP and value == 1 then
+        dispatch_action(nil,Keys.iCommandPlaneStabHrad)
+        
+    end
+    if command == device_commands.CLIC_AUTO_DAMPER    then
+        dispatch_action(nil,Keys.iCommandPlaneStabHbarBank)
+    end         
+        
+    if command == device_commands.CLIC_AUTO_STOP    then
+        dispatch_action(nil,Keys.iCommandPlaneStabCancel)
+    end         
+    if command == device_commands.CLIC_AUTO_BARO and value ==1 then
+    dispatch_action(nil,Keys.iCommandPlaneStabHbarBank)
+    end  
+    
+    if command == device_commands.CLIC_AUTO_RADAR and value ==1 then
+        dispatch_action(nil,Keys.iCommandPlaneStabHrad)
+        end  
+             
+    if command == device_commands.CLIC_AUTO_LEVEL and value ==1 then
+        dispatch_action(nil,Keys.iCommandPlaneStabHorizon) 
+    end      
+    if command == device_commands.CLIC_AUTO_ROUTE  and value ==1 then
+        dispatch_action(nil,Keys.iCommandPlaneRouteAutopilot) 
+    end  
+    if command == device_commands.CLIC_AUTO_ALT  and value ==1 then
+        dispatch_action(nil,Keys.iCommandPlaneStabTangBank) 
+    end      
+    if command == device_commands.CLIC_HUD_REPEATER and value ==1 then
+        dispatch_action(nil,Keys.iCommandPlaneRightMFD_OSB1) 
+    end     
+    if command == device_commands.CLIC_POWER  and value ==1 then
+        dispatch_action(nil,Keys.iCommandPowerOnOff) 
+    end            
+    if command == device_commands.CLIC_ENG_L_START  and value ==1 then  
+        dispatch_action(nil,Keys.iCommandLeftEngineStart) 
+    end    
+    if command == device_commands.CLIC_ENG_R_START  and value ==1 then  
+        dispatch_action(nil,Keys.iCommandRightEngineStart) 
+    end
+    if command == device_commands.CLIC_ENG_L_STOP   then  
+        dispatch_action(nil,Keys.iCommandLeftEngineStop)  
+    end  
+    if command == device_commands.CLIC_ENG_R_STOP    then  
+        dispatch_action(nil,Keys.iCommandRightEngineStop)  
+    end   
+ 
+    if command == device_commands.CLIC_CTM and value ==1 then 
+        dispatch_action(nil,Keys.iCommandPlaneDropSnar) 
+        
+    end    
+    if command == device_commands.CLIC_CTM_CHAFF and value ==1 then 
+        dispatch_action(nil,Keys.iCommandPlaneDropChaffOnce) 
+    end 
+    if command == device_commands.CLIC_CTM_FLARE and value ==1 then 
+        dispatch_action(nil,Keys.iCommandPlaneDropFlareOnce) 
+    end
+    if command == device_commands.CLIC_JAM_IR and value ==1 then 
+        dispatch_action(nil,Keys.iCommandActiveIRJamming) 
+    end  
+    if command == device_commands.CLIC_JAM and value ==1 then 
+        dispatch_action(nil,Keys.iCommandActiveJamming) 
+    end
+
+    if command == device_commands.CLIC_HUD_FILTER  and value ==1 then  
+        dispatch_action(nil,Keys.iCommandPlaneHUDFilterOnOff) 
+    end 
+
+    if command == device_commands.CLIC_GEAR   and value ==1 then  
+        dispatch_action(nil,Keys.iCommandPlaneGear) 
+    end     
+    if command == device_commands.CLIC_CANOPY   and value ==1 then 
+          
+        dispatch_action(nil,Keys.iCommandPlaneFonar)
+
+    end 
+    if command == device_commands.CLIC_NAVLIGHTS   and value ==1 then  
+        dispatch_action(nil,Keys.iCommandPlaneLightsOnOff) 
+        
+    end  
+    if command == device_commands.CLIC_COCKPITLIGHT   and value ==1 then  
+        dispatch_action(nil,Keys.iCommandPlaneCockpitIllumination) 
+    end 
+    if command == device_commands.CLIC_JETTINSON_TANK   and value ==1 then  
+        dispatch_action(nil,Keys.iCommandPlaneJettisonFuelTanks) 
+    end 
+    if command == device_commands.CLIC_JETTINSON   and value ==1 then  
+        dispatch_action(nil,Keys.iCommandPlaneJettisonWeapons) 
+    end
+    if command == device_commands.CLIC_JETTINSON_EMER   and value ==1 then  
+        dispatch_action(nil,Keys.iCommandPlaneJettisonWeapons) 
+        dispatch_action(nil,Keys.iCommandPlaneJettisonWeapons)
+        dispatch_action(nil,Keys.iCommandPlaneJettisonWeapons)
+        dispatch_action(nil,Keys.iCommandPlaneJettisonWeapons)
+        dispatch_action(nil,Keys.iCommandPlaneJettisonWeapons)
+        dispatch_action(nil,Keys.iCommandPlaneJettisonWeapons)
+        dispatch_action(nil,Keys.iCommandPlaneJettisonWeapons)
+        dispatch_action(nil,Keys.iCommandPlaneJettisonWeapons)
+        dispatch_action(nil,Keys.iCommandPlaneJettisonWeapons)
+        dispatch_action(nil,Keys.iCommandPlaneJettisonWeapons)
+    end
+    if command == device_commands.CLIC_RADAR_ON_OFF   and value ==1 then  
+        dispatch_action(nil,Keys.iCommandPlaneRadarOnOff) 
+    end
+ 
+    if command == device_commands.CLIC_TV   and value ==1 then  
+        dispatch_action(nil,Keys.iCommandPlaneEOSOnOff) 
+    end
+    if command == device_commands.CLIC_SCAN_L   then 
+        dispatch_action(nil,Keys.iCommandSelecterLeft)
+       if value ~=1 then
+        dispatch_action(nil,Keys.iCommandSelecterStop)	
+        end
+    end
+
+    if command == device_commands.CLIC_SCAN_R   then  
+        dispatch_action(nil,Keys.iCommandSelecterRight)
+       
+        if value ~=1 then
+        dispatch_action(nil,Keys.iCommandSelecterStop)	
+        end
+    end
+    if command == device_commands.CLIC_SCAN_C   then 
+        if value ==1 then
+        print_message_to_user("Scan Zone Center\nIn development\nNot implemented yet",2)	
+        end
+    end
+    --[[
+        if  selecter_rcl == 0    and  command == Keys.iCommandSelecterLeft          then 
+            selecter_rcl = selecter_rcl-1
+        end
+        if  selecter_rcl == 0    and  command == Keys.iCommandSelecterRight      then 
+            selecter_rcl = selecter_rcl+1
+        end
+        if  selecter_rcl == -1   and  command == Keys.iCommandSelecterRight         then 
+            selecter_rcl = selecter_rcl+1
+        end
+        if  selecter_rcl == 1   and  command == Keys.iCommandSelecterLeft         then 
+            selecter_rcl = selecter_rcl-1
+        end      
+        if  selecter_rcl == 0    and  command == device_commands.CLIC_SCAN_L    and value ==1      then 
+            dispatch_action(nil,Keys.iCommandSelecterLeft)
+            selecter_rcl = -1
+            selecter_timer = 0.25
+        end
+        if  selecter_rcl == 0    and  command == device_commands.CLIC_SCAN_R    and value ==1      then 
+                        
+            dispatch_action(nil,Keys.iCommandSelecterRight)
+            selecter_rcl = 1
+            selecter_timer = 0.25
+        end
+        if  selecter_rcl == -1   and command == device_commands.CLIC_SCAN_R     and value ==1      then
+            print_message_to_user("Please First Center Scan Area",2)                                    -- User message while waiting to be able to correctly code Scan Zone Center
+            dispatch_action(nil,Keys.iCommandSelecterRight)
+            --selecter_timer  = 0.25
+            null_timer      = 0.25
+            dispatch_action(nil,Keys.iCommandSelecterStop)
+            null_timer      = 0.25
+            selecter_rcl    = selecter_rcl+1
+            dispatch_action(nil,Keys.iCommandSelecterRight)
+            --selecter_timer  = 0.25
+            null_timer      = 0.25
+            dispatch_action(nil,Keys.iCommandSelecterStop)
+            null_timer      = 0.25
+            selecter_rcl    = selecter_rcl+1
+        end
+        if  selecter_rcl == 1   and command == device_commands.CLIC_SCAN_L      and value ==1      then 
+            print_message_to_user("Please First Center Scan Area",2)                                    -- User message while waiting to be able to correctly code Scan Zone Center
+            dispatch_action(nil,Keys.iCommandSelecterLeft)
+            --selecter_timer  = 0.25
+            null_timer      = 0.25
+            dispatch_action(nil,Keys.iCommandSelecterStop)
+            null_timer      = 0.25
+            selecter_rcl    = selecter_rcl-1
+            dispatch_action(nil,Keys.iCommandSelecterLeft)
+            --selecter_timer  = 0.25
+            null_timer      = 0.25
+            dispatch_action(nil,Keys.iCommandSelecterStop)
+            null_timer      = 0.25
+            selecter_rcl    = selecter_rcl-1
+        end
+
+        if  command == device_commands.CLIC_SCAN_C  then                    
+            if      selecter_rcl == -1  and value ==1      then
+                dispatch_action(nil,Keys.iCommandSelecterRight)
+            end
+            if      selecter_rcl == 1   and value ==1      then
+                dispatch_action(nil,Keys.iCommandSelecterLeft)
+            end
+            selecter_rcl = 0
+            selecter_timer = 0.25
+        end]]
+        if command ==  device_commands.CLIC_SCAN_EL then
+            selecter_timer = 0.025
+        
+            if command ==  device_commands.CLIC_SCAN_EL and value ==-1  then 
+                dispatch_action(nil,Keys.iCommandSelecterDown)   
+                --print_message_to_user("iCommandSelecterDown")
+            end
+            if command ==  device_commands.CLIC_SCAN_EL and value ==1  then
+                dispatch_action(nil,Keys.iCommandSelecterUp) 
+                --print_message_to_user("iCommandSelecterUp")   
+            end
+        end
+       
+        
+
+        
+    
+
+    
+
+    
+
+    if command == device_commands.CLIC_HUD_COLOR and value == 1 then
+        dispatch_action(nil,Keys.iCommandBrightnessILS)
+        
+    end
+
+    if command == device_commands.CLIC_HUD_BRT and value >0 then
+        dispatch_action(nil,Keys.iCommandHUDBrightnessUp)
+        dispatch_action(nil,Keys.iCommandHUDBrightnessUp)
+        dispatch_action(nil,Keys.iCommandHUDBrightnessUp)
+        dispatch_action(nil,Keys.iCommandHUDBrightnessUp)
+
+
+
+    elseif command == device_commands.CLIC_HUD_BRT and  value <0 then
+        dispatch_action(nil,Keys.iCommandHUDBrightnessDown)  
+        dispatch_action(nil,Keys.iCommandHUDBrightnessDown)
+        dispatch_action(nil,Keys.iCommandHUDBrightnessDown)  
+        dispatch_action(nil,Keys.iCommandHUDBrightnessDown)  
+
+
+    end
+    if command == device_commands.CLIC_MIRROR and value == 1 then
+        dispatch_action(nil,Keys.iCommandToggleMirrors)
+        
+    end
+
+    if command == device_commands.CLIC_ENG_INLET and value == 1 then
+        dispatch_action(nil,Keys.iCommandPlane_HOTAS_ChinaHatForward)
+        
+    end
+
+    if command == device_commands.CLIC_NOSE_WHEEL and value == 1 then
+        dispatch_action(nil,Keys.iCommandPlane_HOTAS_NoseWheelSteeringButton)
+        
+    end
+
+    if command == device_commands.CLIC_EJECT and value == 1 then
+        dispatch_action(nil,Keys.iCommandPlaneEject)
+        
+    end
+
+    if command == device_commands.CLIC_RWR_MODE and value == 1 then
+        dispatch_action(nil,Keys.iCommandChangeRWRMode)
+        
+    end
+
+    if command == device_commands.CLIC_RWR_SOUND and value >0 then
+        dispatch_action(nil,Keys.iCommandPlaneThreatWarnSoundVolumeUp)
+        dispatch_action(nil,Keys.iCommandPlaneThreatWarnSoundVolumeUp)
+    elseif command == device_commands.CLIC_RWR_SOUND and  value <0 then
+        dispatch_action(nil,Keys.iCommandPlaneThreatWarnSoundVolumeDown) 
+        dispatch_action(nil,Keys.iCommandPlaneThreatWarnSoundVolumeDown)  
+    end
+
+    if command == device_commands.CLIC_WARNING_RST and value == 1 then
+        dispatch_action(nil,Keys.iCommandPlaneResetMasterWarning)
+        
+    end
+
+    if command == device_commands.CLIC_DSP_ZOOMIN and value == 1 then
+        dispatch_action(nil,Keys.iCommandPlaneZoomIn)
+        
+    end
+    if command == device_commands.CLIC_DSP_ZOOMOUT and value == 1 then
+        dispatch_action(nil,Keys.iCommandPlaneZoomOut)
+        
+    end
+    if command == device_commands.CLIC_CLOCK_F and value == 1 then
+        dispatch_action(nil,Keys.iCommandFlightClockReset)
+        
+    end
+    if command == device_commands.CLIC_CLOCK_E and value == 1 then
+        dispatch_action(nil,Keys.iCommandClockElapsedTimeReset)
+        
+    end
+    if command == device_commands.CLIC_ALTIMETER and value >0 then
+        dispatch_action(nil,Keys.iCommandAltimeterPressureIncrease)
+        dispatch_action(nil,Keys.iCommandAltimeterPressureIncrease)
+        dispatch_action(nil,Keys.iCommandAltimeterPressureIncrease)
+    elseif command == device_commands.CLIC_ALTIMETER and  value <0 then
+        dispatch_action(nil,Keys.iCommandAltimeterPressureDecrease) 
+        dispatch_action(nil,Keys.iCommandAltimeterPressureDecrease) 
+        dispatch_action(nil,Keys.iCommandAltimeterPressureDecrease) 
+    end
+
+
+
+    if command == device_commands.CLIC_RIPPLE_INT  and  value >0 then
+        dispatch_action(nil,Keys.iCommandChangeRippleInterval)
+
+
+
+    elseif command == device_commands.CLIC_RIPPLE_INT and  value <0 then
+        dispatch_action(nil,Keys.iCommandChangeRippleIntervalDown)  
+
+    end
+
+    if command == device_commands.CLIC_RIPPLE_QT  and value == 1 then
+        dispatch_action(nil,Keys.iCommandChangeRippleQuantity)
+        
+    end
+
+    if command == device_commands.CLIC_RIPPLE_QTA10  then
+        dispatch_action(nil,Keys.iCommandChangeRippleQuantity)
+        
+    end
+
+    if command == device_commands.CLIC_CUTBURST and value == 1 then
+        dispatch_action(nil,Keys.iCommandChangeGunRateOfFire)
+        
+    end
+
+    if command == device_commands.CLIC_PRS_SGL  then
+        dispatch_action(nil,Keys.iCommandChangeReleaseMode)
+        
+    end
+    if command ==  device_commands.CLIC_RADAR_EL  then
+            selecter_timer = 0.3
+            if      value   ==1 then
+            dispatch_action(nil,Keys.iCommandSelecterUp) 
+                 
+            elseif  value   ==0 then
+            dispatch_action(nil,Keys.iCommandSelecterDown)        
+        end
+    end
+    if command ==   device_commands.CLIC_TARGET_UD then
+        planeradar_timer = 0.15
+        if      value   ==1 then
+        dispatch_action(nil,Keys.iCommandPlaneRadarUp) 
+             
+        elseif  value   ==0 then
+        dispatch_action(nil,Keys.iCommandPlaneRadarDown)        
+        end
+    end
+    if command ==   device_commands.CLIC_TARGET_LR then
+        planeradar_timer = 0.20
+        if      value   ==1 then
+        dispatch_action(nil,Keys.iCommandPlaneRadarLeft) 
+             
+        elseif  value   ==0 then
+        dispatch_action(nil,Keys.iCommandPlaneRadarRight)        
+        end
+    end 
+    
+
+
+  
+    if command == device_commands.CLIC_EMERGENCY_BRAKES_ON and value == 1 then
+        dispatch_action(nil,Keys.iCommandPlaneWheelBrakeOn)
+        print_message_to_user("Emergency Brakes\nEngaged")
+        CLIC_EMERGENCY_BRAKES:set(1)
+        
+    end
+    if command == device_commands.CLIC_EMERGENCY_BRAKES_OFF and value == 1 then 
+        dispatch_action(nil,Keys.iCommandPlaneWheelBrakeOff)
+        print_message_to_user("Emergency Brakes\nDisengaged")
+        CLIC_EMERGENCY_BRAKES:set(0)
+    end
+    
+    if command == device_commands.CLIC_LA and value == 1 then
+        dispatch_action(nil,Keys.iCommandPlaneLaunchPermissionOverride)
+        print_message_to_user("Launch Permission Override")
+    end
+    -- F-15C Specifics
+    if command == device_commands.CLIC_CTM_F15 and value == 1 then
+        dispatch_action(nil,CMD_ONOFF)
+    end
+    if command == device_commands.CLIC_COL_LIGHTS and value == 1 then
+        dispatch_action(nil,Keys.iCommandPlaneAntiCollisionLights)
+    end
+    if command == device_commands.CLIC_TAKEOFFTRIMF15 then
+        if value == 1 then
+            dispatch_action(nil,Keys.iCommandPlaneTrimOn)
+        elseif value == 0 then
+            dispatch_action(nil,Keys.iCommandPlaneTrimOff)
+        end
+    end
+    if command == device_commands.CLIC_HUD_COLOR_F15 then
+        dispatch_action(nil,Keys.iCommandBrightnessILS)
+    end
+    if command == device_commands.CLIC_COCKPITLIGHT_F15 then
+        dispatch_action(nil,Keys.iCommandPlaneCockpitIllumination)
+    end
+    if command == device_commands.CLIC_FIRE and value == 1 then
+        dispatch_action(nil,Keys.iCommandPlanePickleOn)
+    else
+        dispatch_action(nil,Keys.iCommandPlanePickleOff)
+    end
+    if command == device_commands.CLIC_LANDING_LIGHTS_F15 and value == 1 then
+        dispatch_action(nil,Keys.iCommandPlaneHeadLightOnOff)
+    end
+    if command == device_commands.CLIC_BINGO then
+        bingo_timer = 0.25
+        if value == -1 then
+            dispatch_action(0,Keys.iCommandPlaneFSQuantityIndicatorSelectorINT,-1)
+        elseif value == 1 then
+            dispatch_action(0,Keys.iCommandPlaneFSQuantityIndicatorSelectorINT,1)
+        end
+    end
+
+    -- Master Combat Mode Controls
+    if command == device_commands.CLIC_MODE_F15 and value > 0 then
+        mastermodeF15 = mastermodeF15 + 1
+    elseif command == device_commands.CLIC_MODE_F15 and value < 0 then
+        mastermodeF15 = mastermodeF15 - 1
+    end
+    if command == device_commands.CLIC_MODE_F15 then
+        if mastermodeF15 == 2 then
+            dispatch_action(nil,Keys.iCommandPlaneModeBVR)
+        elseif mastermodeF15 == 3 then
+            dispatch_action(nil,Keys.iCommandPlaneModeVS)
+        elseif mastermodeF15 == 4 then
+            dispatch_action(nil,Keys.iCommandPlaneModeBore)
+        elseif mastermodeF15 == 5 then
+            dispatch_action(nil,Keys.iCommandPlaneModeFI0)
+        end
+        mastermodeF15 = reset_mastermodeF15(mastermodeF15)
+    end
+
+    -- Radar Controls
+    if command == device_commands.CLIC_ZOOM_F15 and value > 0 then
+        dispatch_action(nil,Keys.iCommandPlaneZoomIn)
+    elseif command == device_commands.CLIC_ZOOM_F15 and value < 0 then
+        dispatch_action(nil,Keys.iCommandPlaneZoomOut)
+    end
+    if command == device_commands.CLIC_RADAR_FREQ_F15 then
+        dispatch_action(nil,Keys.iCommandPlaneChangeRadarPRF)
+    end
+    if command == device_commands.CLIC_RADAR_ON_OFF_F15 then
+        dispatch_action(nil,Keys.iCommandPlaneRadarOnOff)
+    end
+    if command == device_commands.CLIC_RADAR_AZ and value > 0 then
+        radarScanAreaf15 = radarScanAreaf15 + 1
+    elseif command == device_commands.CLIC_RADAR_AZ and value < 0 then
+        radarScanAreaf15 = radarScanAreaf15 - 1
+    end
+    if command == device_commands.CLIC_RADAR_AZ then
+        if radarScanAreaf15 == 1 then
+            dispatch_action(nil,Keys.iCommandIncreaseRadarScanArea)
+        elseif radarScanAreaf15 == 0 then
+            dispatch_action(nil,Keys.iCommandDecreaseRadarScanArea)
+        end
+    end
+    radarScanAreaf15 = reset_radarScanAreaf15(radarScanAreaf15)
+end
+
+
+ 
+    
+
+
+
+
+
+function update()
+--print_message_to_user(CTM_F15:get())
+    if null_timer > 0 then
+        null_timer = null_timer - update_time_step
+        if null_timer <= 0 then
+            null_timer = 0
+        end
+    end
+    if selecter_timer > 0 then
+        selecter_timer = selecter_timer - update_time_step
+        if selecter_timer <= 0 then
+            selecter_timer = 0
+            dispatch_action(nil,Keys.iCommandSelecterStop)
+        end
+    end
+    if planeradar_timer > 0 then
+        planeradar_timer = planeradar_timer - update_time_step
+        if planeradar_timer <= 0 then
+            planeradar_timer = 0
+            dispatch_action(nil,Keys.iCommandPlaneRadarStop)
+        end
+    end
+    if bingo_timer > 0 then
+        bingo_timer = bingo_timer - update_time_step
+        if bingo_timer <= 0 then
+            bingo_timer = 0
+            dispatch_action(0,Keys.iCommandPlaneFSQuantityIndicatorSelectorINT,0) 
+
+        end
+    end
+
+end
+
+need_to_be_closed = false -- close lua state after initialization
+
+

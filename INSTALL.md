@@ -1,21 +1,49 @@
-# RedK0d Clickable
-A partially clickable mod for the FC3 Planes
+# FC3Eagle Clickable Installation
 
-# INSTALLATION 
+A partially clickable cockpit mod for the F-15C in DCS World.
 
-Unzip the contents of the archive in your "Saved Games\DCS\Mods\tech\" directory.
+## Requirements
 
-Then launch the game.
-You can manage the activation of the module in the options.
-Lalt+C to click
-Please report any issues in the dedicated section on Discord or Github. 
+- DCS World
+- F-15C (either standalone module or FC3 package)
+- OVGME (recommended) - [Download here](https://github.com/mguegan/overn/releases)
 
-Concerning the F-15C it is a little more complex:
-Step 1: Download and Install Open Mod Manager Available here: https://github.com/sedenion/OpenModMan/releases
-Step 2: Open the Redk0d Clickable F-15C.omc file contained in CLICKABLE-FC3(version)\DATA\Open Mod Manager
-Step 3: Click on "Edit"
-Step 4: Click on "Target Destination Folder"
-Step 5: Enter your DCS installation directory
-Step 6: Click Apply
-Step 7: Depending if you have Standalone F-15C or FC3 highlight "F-15C Standalone" or "F-15C With FC3" and click "Install" or "Unistall" if you want to install or uninstall.
-Step 8: Fly
+## Installation with OVGME (Recommended)
+
+The `OVGME/` folder contains three mod packages:
+
+| Mod Folder | Target | Description |
+|------------|--------|-------------|
+| `FC3Eagle-Clickable-SavedGames` | Saved Games\DCS | Main mod - **always required** |
+| `FC3Eagle-Clickable-F15C-FC3` | DCS Install | F-15C cockpit overlay for **FC3 owners** |
+| `FC3Eagle-Clickable-F15C-Standalone` | DCS Install | F-15C cockpit overlay for **Standalone F-15C owners** |
+
+### Setup Steps
+
+1. **Configure OVGME** with two mod roots:
+   - One pointing to your `Saved Games\DCS\` folder
+   - One pointing to your DCS installation folder (e.g., `C:\Program Files\Eagle Dynamics\DCS World\`)
+
+2. **Copy mod folders** to appropriate OVGME mod directories:
+   - Copy `FC3Eagle-Clickable-SavedGames` to your Saved Games OVGME mods folder
+   - Copy `FC3Eagle-Clickable-F15C-FC3` OR `FC3Eagle-Clickable-F15C-Standalone` to your DCS Install OVGME mods folder
+
+3. **Enable mods** in OVGME:
+   - Enable `FC3Eagle-Clickable-SavedGames` (always required)
+   - Enable the appropriate F-15C overlay for your version
+
+4. **Launch DCS** and enjoy clickable cockpit controls!
+
+## Manual Installation (Alternative)
+
+1. Copy contents of `FC3Eagle-Clickable-SavedGames/` to your `Saved Games\DCS\` folder
+2. Copy contents of the appropriate F-15C overlay to your DCS installation folder
+
+## Usage
+
+- **LAlt+C** - Toggle clickable mode
+- Manage mod options in DCS Settings
+
+## Uninstallation
+
+If using OVGME, simply disable the mods. For manual installation, remove the installed files or verify/repair DCS.
