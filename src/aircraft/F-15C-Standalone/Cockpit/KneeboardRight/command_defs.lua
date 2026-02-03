@@ -378,6 +378,9 @@ device_commands =
     _506                        = counter(),    
     _507                        = counter(),
     TEST                        = counter(),
+    CLIC_FUEL_QTY_TEST          = counter(),
+    CLIC_FUEL_QTY_SEL           = counter(),
+    CLIC_HUD_BRT_2              = counter(),
 }
 
 

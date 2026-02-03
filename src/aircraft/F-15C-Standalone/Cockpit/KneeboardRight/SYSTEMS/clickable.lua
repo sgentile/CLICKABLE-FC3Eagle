@@ -219,10 +219,21 @@ function SetCommand(command,value)
     end
     if command == device_commands.CLIC_HUD_COLOR_F15  then
         dispatch_action(nil,Keys.iCommandBrightnessILS)
-        
+
     end
-        
-    
+    -- Fuel Quantity Indicator controls
+    if command == device_commands.CLIC_FUEL_QTY_TEST and value == 1 then
+        dispatch_action(nil,Keys.iCommandPlaneFSQuantityIndicatorTest)
+    end
+    if command == device_commands.CLIC_FUEL_QTY_SEL then
+        if value ~= 0 then
+            dispatch_action(0,Keys.iCommandPlaneFSQuantityIndicatorSelectorMAIN, value)
+        else
+            dispatch_action(0,Keys.iCommandPlaneFSQuantityIndicatorSelectorMAIN, 0)
+        end
+    end
+
+
 
 end
 

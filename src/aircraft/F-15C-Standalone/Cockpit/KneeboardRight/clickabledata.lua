@@ -109,12 +109,12 @@ elements["TMB_HUD_SET_DAY-NIGHT"]               = default_2_position_tumb("Video
 elements["TMB_VIDEO_RECORD_ON-OFF"]             = default_2_position_tumb("Video Record\nNot in use",           devices.CLICKABLE_GENERIC_SYSTEM,   device_commands._332,332, inversed_)
 elements["TMB_CAMERA_HUD-VSD"]                  = default_2_position_tumb("Camera Hud\nNot in use",             devices.CLICKABLE_GENERIC_SYSTEM,   device_commands._333,333, inversed_)
 elements["FUEL_QTY"]                            = default_button_axis("Fuel Indicator\n(Click):Quantity Test\n(Scroll):Quantity Selector",
-                                                                                                                devices.CLICKABLE_GENERIC_SYSTEM,   Keys.iCommandPlaneFSQuantityIndicatorTest,
-                                                                                                                                                    Keys.iCommandPlaneFSQuantityIndicatorSelectorMAIN)
+                                                                                                                devices.CLICKABLE_GENERIC_SYSTEM,   device_commands.CLIC_FUEL_QTY_TEST,
+                                                                                                                                                    device_commands.CLIC_FUEL_QTY_SEL)
 elements["FUEL_QTY"].class     = {class_type.TUMB, class_type.LEV}
 elements["FUEL_QTY"].relative  = {false,true}
 elements["FUEL_QTY"].arg_lim   = {{0, 1}, {0, 1}}
-elements["FUEL_QTY"].stop_action    = {Keys.iCommandPlaneFSQuantityIndicatorSelectorMAIN, 0}
+elements["FUEL_QTY"].stop_action    = {device_commands.CLIC_FUEL_QTY_SEL, 0}
 elements["STEER_MODE"]                          = default_axis_limited("Navigation Modes",                      devices.CLICKABLE_GENERIC_SYSTEM,   device_commands.CLIC_NAVMODES      )  
       
 elements["CHANNEL_FP"]                          = default_axis_limited("Radio Channel Selector\nNot in use",    devices.RADIO_CONTROL_SYSTEM,       device_commands.CLIC_RCHAN,334, 0, 0.1,false,true)
@@ -256,8 +256,8 @@ elements["VI"]                                  = default_button("VI\nNot in use
 --elements["TMB_ENGINE_EXT_PWR"]                  = default_3_position_tumb("Engine External Power",              devices.ENGINES_CONTROL_SYSTEM,     device_commands.ENG_EXT_PWR,369)
 --elements["TMB_ENGINE_STARTER"]                  = default_2_position_tumb("Engine Starter",                     devices.ENGINES_CONTROL_SYSTEM,     device_commands.ENG_STARTER,370)
 --elements["TMB_ENGINE_STARTER"].arg_lim          = {{-1, 1}, {-1, 1}}
-elements["L_ENG_MASTER"]                        = default_animated_lever("Left Engine Start",                  devices.ENGINES_CONTROL_SYSTEM,     Keys.iCommandLeftEngineStart)
-elements["R_ENG_MASTER"]                        = default_animated_lever("Right Engine Start",                 devices.ENGINES_CONTROL_SYSTEM,     Keys.iCommandRightEngineStart)
+elements["L_ENG_MASTER"]                        = default_animated_lever("Left Engine Start",                  devices.CLICKABLE_GENERIC_SYSTEM,   device_commands.CLIC_LENG)
+elements["R_ENG_MASTER"]                        = default_animated_lever("Right Engine Start",                 devices.CLICKABLE_GENERIC_SYSTEM,   device_commands.CLIC_RENG)
 --elements["JET_FUEL_STARTER"]                    = default_2_position_tumb("Jet Fuel Starter",                   devices.ENGINES_CONTROL_SYSTEM,     device_commands.ENG_JFS,503)
 --elements["TMB_ENG_START_L"]                     = default_3_position_tumb("Engine Left\nFuel Flow\nNot in use",            devices.ENGINES_CONTROL_SYSTEM,     device_commands.ENG_FF_L,411)
 --elements["TMB_ENG_START_L"].arg_lim             = {{-1, 1}, {-1, 1}} 
