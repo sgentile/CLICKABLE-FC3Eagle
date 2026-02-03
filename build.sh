@@ -1,8 +1,7 @@
 #!/bin/bash
 # Build script for Clickable-FC3Eagle OVGME distribution
-# Creates a zip file with 2 folders:
+# Creates a zip file with the tech mod:
 #   - Clickable-FC3Eagle (SavedGames/Mods/tech variant)
-#   - Clickable-FC3Eagle-Ovegme-Mod (aircraft mod for F-15C Standalone)
 
 set -e
 
@@ -48,29 +47,13 @@ mkdir -p "$TECH_ROOT/Shapes"
 cp -r "$SCRIPT_DIR/Shapes/"* "$TECH_ROOT/Shapes/"
 
 # ============================================
-# 2. Clickable-FC3Eagle-Ovegme-Mod (aircraft mod variant)
-# ============================================
-echo "Building Clickable-FC3Eagle-Ovegme-Mod..."
-
-STANDALONE_ROOT="$BUILD_DIR/Clickable-FC3Eagle-Ovegme-Mod/Mods/aircraft/F-15C/Cockpit"
-mkdir -p "$STANDALONE_ROOT"
-
-# Copy from src/aircraft sources
-if [ -d "$SCRIPT_DIR/src/aircraft/F-15C-Standalone/Cockpit" ]; then
-    cp -r "$SCRIPT_DIR/src/aircraft/F-15C-Standalone/Cockpit/"* "$STANDALONE_ROOT/"
-else
-    echo "ERROR: F15C-Standalone source not found at src/aircraft/F-15C-Standalone/Cockpit"
-    exit 1
-fi
-
-# ============================================
 # Create ZIP
 # ============================================
 echo "Creating zip file..."
 
 cd "$BUILD_DIR"
 rm -f "$DIST_DIR/$ZIP_NAME"
-zip -r "$DIST_DIR/$ZIP_NAME" Clickable-FC3Eagle Clickable-FC3Eagle-Ovegme-Mod
+zip -r "$DIST_DIR/$ZIP_NAME" Clickable-FC3Eagle
 
 echo ""
 echo "=== Build complete ==="

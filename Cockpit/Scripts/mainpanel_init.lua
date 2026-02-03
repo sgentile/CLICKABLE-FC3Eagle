@@ -77,6 +77,32 @@ if  aircraft=="F-15C"                       then
     LIQUID_OXY.output                   = {-1.0, 1.0}
     LIQUID_OXY.parameter_name           = "LIQUID_OXY"
 
+    -- Light Control System params
+    MISC_TAXI_LIGHT                     = CreateGauge("parameter")
+    MISC_TAXI_LIGHT.arg_number          = 428
+    MISC_TAXI_LIGHT.input               = {-1.0, 1.0}
+    MISC_TAXI_LIGHT.output              = {-1.0, 1.0}
+    MISC_TAXI_LIGHT.parameter_name      = "MISC_TAXI_LIGHT"
+
+    -- Radar Control System params
+    RADAR_POWER                         = CreateGauge("parameter")
+    RADAR_POWER.arg_number              = 488
+    RADAR_POWER.input                   = {0, 1}
+    RADAR_POWER.output                  = {0, 1}
+    RADAR_POWER.parameter_name          = "RADAR_POWER"
+
+    RADAR_MODE_SEL                      = CreateGauge("parameter")
+    RADAR_MODE_SEL.arg_number           = 493
+    RADAR_MODE_SEL.input                = {0, 3}
+    RADAR_MODE_SEL.output               = {0, 1}
+    RADAR_MODE_SEL.parameter_name       = "RADAR_MODE_SEL"
+
+    RADAR_SPL_MODE                      = CreateGauge("parameter")
+    RADAR_SPL_MODE.arg_number           = 492
+    RADAR_SPL_MODE.input                = {0, 1}
+    RADAR_SPL_MODE.output               = {0, 1}
+    RADAR_SPL_MODE.parameter_name       = "RADAR_SPL_MODE"
+
 end
 
 

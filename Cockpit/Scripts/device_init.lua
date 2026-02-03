@@ -5,8 +5,8 @@ dofile(LockOn_Options.common_script_path.."tools.lua")
 if      supported == true  then																										--Mod launching logic.
 MainPanel = {"ccMainPanel",LockOn_Options.script_path.."mainpanel_init.lua", {} }
 creators = {}
-creators[devices.CLICKABLE]	 		        = {"avLuaDevice"                ,LockOn_Options.script_path.."SYSTEMS/clickable.lua"}	
+creators[devices.CLICKABLE]	 		        = {"avLuaDevice"                ,LockOn_Options.script_path.."SYSTEMS/clickable.lua"}
 creators[devices.PNT_UPD] 					= {"avLuaDevice"				,LockOn_Options.script_path.."SYSTEMS/PNT_update.lua"}
-creators[devices.UTILS]    		        = {"avLuaDevice"				,LockOn_Options.script_path.."UTILS/utils.lua"}
-
+creators[devices.LIGHT_CONTROL]				= {"avLuaDevice"				,LockOn_Options.script_path.."SYSTEMS/light_control.lua"}
+creators[devices.RADAR_CONTROL]				= {"avLuaDevice"				,LockOn_Options.script_path.."SYSTEMS/radar_control.lua"}
 end

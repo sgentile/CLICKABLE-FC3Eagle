@@ -45,3 +45,25 @@ elements["PNT_CAS_ATT-HOLD"]        = default_button("Autopilot - Attitude Hold"
 elements["PNT_CAS_ATT-HOLD"].stop_action        = nil
 elements["ENG_CUTOFF_L"]             = default_button("Engine Left Stop",                                    devices.CLICKABLE,  device_commands.CLIC_ENG_L_STOP    )
 elements["ENG_CUTOFF_R"]             = default_button("Engine Right Stop",                                   devices.CLICKABLE,  device_commands.CLIC_ENG_R_STOP    )
+
+-- Light Control System elements
+local rotvalue                       = (100/15)/10
+elements["EXT_LT_POSITION"]          = default_axis_limited("Position Lights",                               devices.LIGHT_CONTROL,  device_commands.LIGHT_POS,     484, 0, rotvalue, false, false, {0, 0.7})
+elements["EXT_LT_FORMATION"]         = default_axis_limited("Formation Lights",                              devices.LIGHT_CONTROL,  device_commands.LIGHT_FORM,    485, 0, rotvalue, false, false, {0, 0.6})
+elements["TMB_MISC_TAXI-LIGHT"]      = default_button("Ldg/Off/Taxi Light",                                  devices.LIGHT_CONTROL,  device_commands.LIGHT_LDG_TAXI)
+elements["TMB_EXT-LT_ANTI-COLLISION"] = default_2_position_tumb("Anti Collision Lights",                     devices.LIGHT_CONTROL,  device_commands.LIGHT_ANTICOL, 451)
+elements["TMB_EXT-LT_ANTI-COLLISION"].arg_lim = {{-1, 1}, {-1, 1}}
+elements["INTERIOR_FLT-INST"]        = default_axis_limited("Illumination Cockpit",                          devices.LIGHT_CONTROL,  device_commands.LIGHT_COCKPIT, 478, 0, 1, false, false, {0.1, 0.6})
+
+-- Radar Control System elements
+elements["RADAR_SPL-MODE"]           = default_axis_limited("Radar Spl Modes",                               devices.RADAR_CONTROL,  device_commands.CLIC_RADAR_SPL_MODE,  0, 0, rotvalue, false, false, {0, 1})
+elements["RADAR_MODE_SEL"]           = default_axis_limited("Radar Master Mode Select",                      devices.RADAR_CONTROL,  device_commands.CLIC_RADAR_MODE_SEL,  0, 0, rotvalue, false, false, {0, 1})
+elements["RADAR_AZ_SCAN"]            = default_axis_limited("Radar Az Scan",                                 devices.RADAR_CONTROL,  device_commands.CLIC_RADAR_AZ_SCAN)
+elements["RADAR_EL_SCAN"]            = default_axis_limited("Radar El Scan",                                 devices.RADAR_CONTROL,  device_commands.CLIC_RADAR_EL_SCAN,   0, 0, rotvalue, false, false, {0, 1})
+elements["RADAR_EL_SCAN"].cycle      = false
+elements["RADAR_RANGE"]              = default_axis_limited("Radar Range",                                   devices.RADAR_CONTROL,  device_commands.CLIC_RADAR_RANGE,     0, 0, rotvalue, false, false, {0, 1})
+elements["RADAR_RANGE"].cycle        = false
+elements["RADAR_POWER"]              = default_axis_limited("Radar Power",                                   devices.RADAR_CONTROL,  device_commands.CLIC_RADAR_POWER,     0, 0, rotvalue, false, false, {0, 1})
+
+-- Additional clickable elements
+elements["TMB_FUEL_OPEN/CLOSE"]      = default_button("Refueling Port",                                      devices.CLICKABLE,  device_commands.CLIC_RPORT)

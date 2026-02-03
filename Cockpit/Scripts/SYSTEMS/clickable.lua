@@ -341,6 +341,19 @@ function SetCommand(command,value)
     end
     if command == device_commands.CLIC_FUEL_DUMP_OFF      then
         dispatch_action(nil,Keys.iCommandPlaneFuelOff)
+    end
+    if command == device_commands.CLIC_FUEL_QTY_TEST and value == 1 then
+        dispatch_action(nil,Keys.iCommandPlaneFSQuantityIndicatorTest)
+    end
+    if command == device_commands.CLIC_FUEL_QTY_SEL then
+        if value ~= 0 then
+            dispatch_action(0,Keys.iCommandPlaneFSQuantityIndicatorSelectorMAIN, value)
+        else
+            dispatch_action(0,Keys.iCommandPlaneFSQuantityIndicatorSelectorMAIN, 0)
+        end
+    end
+    if command == device_commands.CLIC_RPORT and value == 1 then
+        dispatch_action(nil,Keys.iCommandPlaneAirRefuel)
     end  
     if command == device_commands.CLIC_AUTO_GCA and value == 1 then
         dispatch_action(nil,Keys.iCommandPlaneSAUHRadio)

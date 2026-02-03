@@ -289,5 +289,23 @@ device_commands =
     CLIC_CAS_PITCH              = counter(),
     CLIC_CAS_ALT_HOLD           = counter(),
     CLIC_CAS_ATT_HOLD           = counter(),
+    -- Light Control System
+    LIGHT_ANTICOL               = counter(),
+    LIGHT_POS                   = counter(),
+    LIGHT_FORM                  = counter(),
+    LIGHT_LDG_TAXI              = counter(),
+    LIGHT_COCKPIT               = counter(),
+    _409                        = counter(),
+    _180                        = counter(),
+    -- Radar Control System
+    CLIC_RADAR_SPL_MODE         = counter(),
+    CLIC_RADAR_MODE_SEL         = counter(),
+    CLIC_RADAR_POWER            = counter(),
+    CLIC_RADAR_EL_SCAN          = counter(),
+    CLIC_RADAR_AZ_SCAN          = counter(),
+    -- Additional clickable commands
+    CLIC_FUEL_QTY_TEST          = counter(),
+    CLIC_FUEL_QTY_SEL           = counter(),
+    CLIC_RPORT                  = counter(),
 
 }

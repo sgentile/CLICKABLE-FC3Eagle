@@ -7,7 +7,8 @@ end
 devices = {}
 devices["CLICKABLE"]     			= counter()
 devices["PNT_UPD"]     				= counter()
-devices["UTILS"]     				= counter()
+devices["LIGHT_CONTROL"]			= counter()
+devices["RADAR_CONTROL"]			= counter()
 
 
 
