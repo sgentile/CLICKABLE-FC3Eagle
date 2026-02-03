@@ -1,22 +1,21 @@
-# FC3Eagle Clickable Installation
+# ClickableF15CMod Installation
 
 A partially clickable cockpit mod for the F-15C in DCS World.
 
 ## Requirements
 
 - DCS World
-- F-15C (either standalone module or FC3 package)
+- F-15C Standalone module
 - OVGME (recommended) - [Download here](https://github.com/mguegan/overn/releases)
 
 ## Installation with OVGME (Recommended)
 
-The `OVGME/` folder contains three mod packages:
+The distribution zip contains two mod packages:
 
 | Mod Folder | Target | Description |
 |------------|--------|-------------|
-| `FC3Eagle-Clickable-SavedGames` | Saved Games\DCS | Main mod - **always required** |
-| `FC3Eagle-Clickable-F15C-FC3` | DCS Install | F-15C cockpit overlay for **FC3 owners** |
-| `FC3Eagle-Clickable-F15C-Standalone` | DCS Install | F-15C cockpit overlay for **Standalone F-15C owners** |
+| `ClickableF15CMod` | Saved Games\DCS | Main mod - **always required** |
+| `ClickableF15CMod-Aircraft` | DCS Install | F-15C cockpit overlay |
 
 ### Setup Steps
 
@@ -25,19 +24,19 @@ The `OVGME/` folder contains three mod packages:
    - One pointing to your DCS installation folder (e.g., `C:\Program Files\Eagle Dynamics\DCS World\`)
 
 2. **Copy mod folders** to appropriate OVGME mod directories:
-   - Copy `FC3Eagle-Clickable-SavedGames` to your Saved Games OVGME mods folder
-   - Copy `FC3Eagle-Clickable-F15C-FC3` OR `FC3Eagle-Clickable-F15C-Standalone` to your DCS Install OVGME mods folder
+   - Copy `ClickableF15CMod` to your Saved Games OVGME mods folder
+   - Copy `ClickableF15CMod-Aircraft` to your DCS Install OVGME mods folder
 
 3. **Enable mods** in OVGME:
-   - Enable `FC3Eagle-Clickable-SavedGames` (always required)
-   - Enable the appropriate F-15C overlay for your version
+   - Enable `ClickableF15CMod` (always required)
+   - Enable `ClickableF15CMod-Aircraft`
 
 4. **Launch DCS** and enjoy clickable cockpit controls!
 
 ## Manual Installation (Alternative)
 
-1. Copy contents of `FC3Eagle-Clickable-SavedGames/` to your `Saved Games\DCS\` folder
-2. Copy contents of the appropriate F-15C overlay to your DCS installation folder
+1. Copy contents of `ClickableF15CMod/` to your `Saved Games\DCS\` folder
+2. Copy contents of `ClickableF15CMod-Aircraft/` to your DCS installation folder
 
 ## Usage
 

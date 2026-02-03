@@ -23,7 +23,7 @@ local   radar_pos_az        =   0
 local   planeradar_timer    =   0
 local   bingo_timer         =   0
 local   null_timer          =   0
-local   mod_version         =   options.plugins["Clickable-FC3Eagle"].Version
+local   mod_version         =   options.plugins["ClickableF15CMod"].Version
 
 dev:listen_command(Keys.iCommandSelecterRight)
 dev:listen_command(Keys.iCommandSelecterLeft)
@@ -44,7 +44,8 @@ local CTM_F15                   =   get_param_handle("CTM_F15")
 function post_initialize()
     --print_message_to_user(mod_version)
     --print_message_to_user(aircraft,10)
-    dispatch_action(nil,Keys.iCommandCockpitClickModeOnOff) 
+    -- Removed: auto-enabling clickable mode was overriding default keyboard/joystick bindings
+    -- dispatch_action(nil,Keys.iCommandCockpitClickModeOnOff)
     chutestate              = 0
     CLIC_MODE_AA_COUNTER    = 0
     CLIC_MODE_QUICK_COUNTER = 0
@@ -745,6 +746,22 @@ function SetCommand(command,value)
     end
     if command == device_commands.CLIC_COCKPITLIGHT_F15 then
         dispatch_action(nil,Keys.iCommandPlaneCockpitIllumination)
+    end
+    -- CAS/Autopilot controls (routed through device_commands to avoid binding conflicts)
+    if command == device_commands.CLIC_CAS_YAW and value == 1 then
+        dispatch_action(nil,Keys.iCommandHelicopter_PPR_button_H_up)
+    end
+    if command == device_commands.CLIC_CAS_ROLL and value == 1 then
+        dispatch_action(nil,Keys.iCommandHelicopter_PPR_button_K_up)
+    end
+    if command == device_commands.CLIC_CAS_PITCH and value == 1 then
+        dispatch_action(nil,Keys.iCommandHelicopter_PPR_button_T_up)
+    end
+    if command == device_commands.CLIC_CAS_ALT_HOLD and value == 1 then
+        dispatch_action(nil,Keys.iCommandPlaneStabHbar)
+    end
+    if command == device_commands.CLIC_CAS_ATT_HOLD and value == 1 then
+        dispatch_action(nil,Keys.iCommandPlaneAutopilot)
     end
     if command == device_commands.CLIC_FIRE then
         if value == 1 then

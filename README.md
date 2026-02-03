@@ -1,4 +1,4 @@
-# Clickable-FC3Eagle
+# ClickableF15CMod
 
 A partially clickable cockpit mod for the F-15C in DCS World.
 
@@ -9,7 +9,7 @@ Thanks to RedK0d for the original work: https://github.com/RedK0d/CLICKABLE-FC3
 ## Features
 
 - Clickable cockpit controls for the F-15C
-- Compatible with both FC3 and Standalone F-15C module
+- Compatible with F-15C Standalone module
 - OVGME compatible for easy installation/removal
 - Animated cockpit elements
 - Enhanced interactivity with dedicated controls
@@ -21,7 +21,7 @@ See [INSTALL.md](INSTALL.md) for detailed installation instructions.
 ### Quick Start (OVGME)
 
 1. Download [OVGME](https://github.com/mguegan/overn/releases)
-2. Copy mod folders from `OVGME/` to your OVGME mod directories
+2. Copy mod folders from the distribution zip to your OVGME mod directories
 3. Enable the mods in OVGME
 4. Launch DCS
 
@@ -107,6 +107,4 @@ Additional visual animations that enhance immersion:
 
 ## Support
 
-Please report issues on [GitHub Issues](../../issues)  
-
-
+Please report issues on [GitHub Issues](../../issues)

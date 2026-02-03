@@ -1,14 +1,14 @@
 dofile(lfs.writedir().."Config\\options.lua")
-local   rep_source_utils    =   get_dcs_plugin_path("Clickable-FC3Eagle").."\\DATA\\"
+local   rep_source_utils    =   get_dcs_plugin_path("ClickableF15CMod").."\\DATA\\"
 
 local   rep_dest_FC3        =   lfs.currentdir().."Mods\\aircraft\\Flaming Cliffs\\"                                   --lfs.currentdir().."Mods\\aircraft\\Flaming Cliffs\\Cockpit\\KneeboardRight\\"
 local   rep_dest_F15C       =   lfs.currentdir().."Mods\\aircraft\\F-15C\\"                                            --lfs.currentdir().."Mods\\aircraft\\F-15C\\Cockpit\\KneeboardRight\\"
 local   rep_input_F15C      =   lfs.currentdir().."Mods\\aircraft\\F-15C\\Input\\"
 local   rep_input_FC3       =   lfs.currentdir().."Mods\\aircraft\\Flaming Cliffs\\Input\\F-15C\\"
-local   mod_version         =   get_plugin_option_value("Clickable-FC3Eagle", "Version", "local")
+local   mod_version         =   get_plugin_option_value("ClickableF15CMod", "Version", "local")
 local   present_FC3         =   options.plugins["FC3"]
 local   present_F15C        =   options.plugins["F-15C"]
-local   device_init         =   "--[[CLICKABLE-FC3 ".. mod_version  .."]]"
+local   device_init         =   "--[[ClickableF15C ".. mod_version  .."]]"
 local   date                =   os.date()
 local   modified            =   "--[[Modified " .. date .. "]]"
 local   entry_f15c          =   "MAC_flyable('F-15C', current_mod_path..'/Cockpit/KneeboardRight/',F15FM, current_mod_path..'/Comm/F-15C.lua')"

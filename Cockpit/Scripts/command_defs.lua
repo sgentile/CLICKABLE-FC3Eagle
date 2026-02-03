@@ -282,6 +282,12 @@ device_commands =
     CLIC_COM_R                  = counter(),
     CLIC_TAKEOFFTRIMF15         = counter(),
     CLIC_COL_LIGHTS             = counter(),
-    CLIC_TEST                   = counter(), 
+    CLIC_TEST                   = counter(),
+    -- CAS/Autopilot controls (routed through device_commands to avoid binding conflicts)
+    CLIC_CAS_YAW                = counter(),
+    CLIC_CAS_ROLL               = counter(),
+    CLIC_CAS_PITCH              = counter(),
+    CLIC_CAS_ALT_HOLD           = counter(),
+    CLIC_CAS_ATT_HOLD           = counter(),
 
 }

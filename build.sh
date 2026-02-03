@@ -1,9 +1,8 @@
 #!/bin/bash
-# Build script for CLICKABLE-FC3 OVGME distribution
-# Creates a zip file with 3 folders:
-#   - Clickable-FC3Eagle (SavedGames/Mods/tech variant)
-#   - F15C-Standalone (aircraft mod for F-15C Standalone)
-#   - F15C-FC3 (aircraft mod for Flaming Cliffs)
+# Build script for ClickableF15CMod OVGME distribution
+# Creates a zip file with 2 folders:
+#   - ClickableF15CMod (SavedGames/Mods/tech variant)
+#   - ClickableF15CMod-Aircraft (aircraft mod for F-15C Standalone)
 
 set -e
 
@@ -12,9 +11,9 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 VERSION="${1:-$(grep -o 'v[0-9]\+\.[0-9]\+\.[0-9]\+' "$SCRIPT_DIR/entry.lua" | head -1)}"
 BUILD_DIR="$SCRIPT_DIR/build"
 DIST_DIR="$SCRIPT_DIR/dist"
-ZIP_NAME="Clickable-FC3Eagle-${VERSION}.zip"
+ZIP_NAME="ClickableF15CMod-${VERSION}.zip"
 
-echo "=== Building CLICKABLE-FC3 version $VERSION ==="
+echo "=== Building ClickableF15CMod version $VERSION ==="
 
 # Clean previous build
 rm -rf "$BUILD_DIR"
@@ -22,11 +21,11 @@ mkdir -p "$BUILD_DIR"
 mkdir -p "$DIST_DIR"
 
 # ============================================
-# 1. Clickable-FC3Eagle (SavedGames/Mods/tech variant)
+# 1. ClickableF15CMod (SavedGames/Mods/tech variant)
 # ============================================
-echo "Building Clickable-FC3Eagle (SavedGames/tech variant)..."
+echo "Building ClickableF15CMod (SavedGames/tech variant)..."
 
-TECH_ROOT="$BUILD_DIR/Clickable-FC3Eagle/Mods/tech/Clickable-FC3Eagle"
+TECH_ROOT="$BUILD_DIR/ClickableF15CMod/Mods/tech/ClickableF15CMod"
 mkdir -p "$TECH_ROOT"
 
 # Copy entry.lua
@@ -49,11 +48,11 @@ mkdir -p "$TECH_ROOT/Shapes"
 cp -r "$SCRIPT_DIR/Shapes/"* "$TECH_ROOT/Shapes/"
 
 # ============================================
-# 2. F15C-Standalone (aircraft mod variant)
+# 2. ClickableF15CMod-Aircraft (aircraft mod variant)
 # ============================================
-echo "Building F15C-Standalone..."
+echo "Building ClickableF15CMod-Aircraft..."
 
-STANDALONE_ROOT="$BUILD_DIR/F15C-Standalone/Mods/aircraft/F-15C/Cockpit"
+STANDALONE_ROOT="$BUILD_DIR/ClickableF15CMod-Aircraft/Mods/aircraft/F-15C/Cockpit"
 mkdir -p "$STANDALONE_ROOT"
 
 # Copy from src/aircraft sources
@@ -65,29 +64,13 @@ else
 fi
 
 # ============================================
-# 3. F15C-FC3 (Flaming Cliffs variant)
-# ============================================
-echo "Building F15C-FC3..."
-
-FC3_ROOT="$BUILD_DIR/F15C-FC3/Mods/aircraft/Flaming Cliffs/Cockpit"
-mkdir -p "$FC3_ROOT"
-
-# Copy from src/aircraft sources
-if [ -d "$SCRIPT_DIR/src/aircraft/F-15C-FC3/Cockpit" ]; then
-    cp -r "$SCRIPT_DIR/src/aircraft/F-15C-FC3/Cockpit/"* "$FC3_ROOT/"
-else
-    echo "ERROR: F15C-FC3 source not found at src/aircraft/F-15C-FC3/Cockpit"
-    exit 1
-fi
-
-# ============================================
 # Create ZIP
 # ============================================
 echo "Creating zip file..."
 
 cd "$BUILD_DIR"
 rm -f "$DIST_DIR/$ZIP_NAME"
-zip -r "$DIST_DIR/$ZIP_NAME" Clickable-FC3Eagle F15C-Standalone F15C-FC3
+zip -r "$DIST_DIR/$ZIP_NAME" ClickableF15CMod ClickableF15CMod-Aircraft
 
 echo ""
 echo "=== Build complete ==="

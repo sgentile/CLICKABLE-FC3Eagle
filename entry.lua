@@ -1,11 +1,11 @@
-declare_plugin("Clickable-FC3Eagle",
+declare_plugin("ClickableF15CMod",
 {
 	installed 	  	= 	true,
 	dirName		  	= 	current_mod_path,
-	displayName   	= 	"Clickable FC3 Eagle",
-	shortName	  	= 	"Clickable-FC3Eagle",
-	fileMenuName  	= 	"Clickable FC3 Eagle",
-	version			=	"v1.1.5",
+	displayName   	= 	"Clickable F15C Mod",
+	shortName	  	= 	"ClickableF15CMod",
+	fileMenuName  	= 	"Clickable F15C Mod",
+	version			=	"v1.1.6",
 	state		  	= 	"installed",
 	developerName 	= 	"RedK0d/SGentile",
 	info		  	= 	"Clickable cockpit mod for F-15C",
@@ -14,17 +14,17 @@ declare_plugin("Clickable-FC3Eagle",
 	Skins	=
 	{
 		{
-			name	= ("Clickable-FC3Eagle"),
+			name	= ("ClickableF15CMod"),
 			dir		= "Skins"
 		},
 	},
 	Options =
 	{
 		{
-			name		= ("Clickable FC3 Eagle"),
-            nameId		= "Clickable-FC3Eagle",
+			name		= ("Clickable F15C Mod"),
+            nameId		= "ClickableF15CMod",
             dir			= "Options",
-            CLSID		= "{FC3 CLICKABLE}"
+            CLSID		= "{F15C CLICKABLE}"
 		},
 	},
 
@@ -35,10 +35,10 @@ local path 		= current_mod_path..'/Cockpit/Scripts/'
 mount_vfs_texture_path  (current_mod_path ..  "/Textures")
 mount_vfs_model_path    (current_mod_path ..  "/Shapes")
 
-		
 
-		
-add_plugin_systems('CLICKABLE-FC3_Module','*',path,
+
+
+add_plugin_systems('ClickableF15C_Module','*',path,
 	{
 	["F-15C"]					= {enable_options_key_for_unit = 'F15c_enabled'},
 	}

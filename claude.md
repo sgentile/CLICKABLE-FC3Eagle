@@ -1,14 +1,14 @@
-# CLICKABLE-FC3 Project Overview
+# ClickableF15CMod Project Overview
 
 ## Project Purpose
-This is a DCS World mod for the F-15C aircraft that adds fully clickable cockpit controls and animations. Originally forked from RedK0d's CLICKABLE-FC3 project and now focused exclusively on the F-15C (both FC3 and Standalone versions).
+This is a DCS World mod for the F-15C aircraft that adds fully clickable cockpit controls and animations. Originally forked from RedK0d's CLICKABLE-FC3 project and now focused exclusively on the F-15C Standalone module.
 
 ## Project Structure & File Descriptions
 
 ### Root Level Files
 - **README.md** - Main documentation with features, installation, and list of clickable controls
 - **CHANGELOG.md** - Development history and version notes
-- **INSTALL.md** - Installation instructions for both FC3 and Standalone versions
+- **INSTALL.md** - Installation instructions
 - **entry.lua** - Main entry point for the mod
 - **claude.md** - Development context (this file)
 
@@ -16,7 +16,7 @@ This is a DCS World mod for the F-15C aircraft that adds fully clickable cockpit
 Main implementation directory for the F-15C clickable system:
 
 - **clickabledata.lua** - Defines all clickable UI elements and their mappings. Maps 3D cockpit elements (PNT_* names) to buttons, axes, and rotaries with hints and device commands. This is the primary file for adding new clickable controls.
-  
+
 - **clickable_defs.lua** - Contains function templates for creating clickable element definitions:
   - `default_button()` - Creates button controls (on/off)
   - `default_movable_axis()` - Creates axis controls (continuous movement)
@@ -58,14 +58,11 @@ Handles runtime animation logic and state management:
 
 - **functions.lua** - Utility functions for file operations (read, write, copy, move, etc.)
 
-### OVGME/ - Distribution Packages
-Ready-to-use mod packages for different variants:
+### Build Output (build/)
+Build artifacts created by build.sh:
 
-- **FC3Eagle-Clickable-F15C-FC3/** - F-15C FC3 module version (deprecated)
-- **FC3Eagle-Clickable-F15C-Standalone/** - F-15C Standalone module version (current)
-- **FC3Eagle-Clickable-SavedGames/** - SavedGames installation variant
-
-Each contains complete duplicates of the Cockpit/Scripts structure organized for OVGME.
+- **ClickableF15CMod/** - SavedGames/Mods/tech installation variant
+- **ClickableF15CMod-Aircraft/** - Aircraft mod for F-15C Standalone
 
 ### Options/ - Configuration Files
 User settings and options management:
