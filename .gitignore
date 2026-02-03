@@ -6,3 +6,4 @@ Cockpit*.edm
 
 # Build outputs
 /build/
+/dist/
