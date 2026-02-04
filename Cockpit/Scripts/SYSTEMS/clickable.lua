@@ -750,11 +750,11 @@ function SetCommand(command,value)
     if command == device_commands.CLIC_TAKEOFFTRIMF15 then
         if value == 1 then
             dispatch_action(nil,Keys.iCommandPlaneTrimOn)
-        elseif value == 0 then
+        elseif value == -1 then
             dispatch_action(nil,Keys.iCommandPlaneTrimOff)
         end
     end
-    if command == device_commands.CLIC_HUD_COLOR_F15 then
+    if command == device_commands.CLIC_HUD_COLOR_F15 and value == 1 then
         dispatch_action(nil,Keys.iCommandBrightnessILS)
     end
     if command == device_commands.CLIC_COCKPITLIGHT_F15 then
@@ -820,7 +820,7 @@ function SetCommand(command,value)
     elseif command == device_commands.CLIC_ZOOM_F15 and value < 0 then
         dispatch_action(nil,Keys.iCommandPlaneZoomOut)
     end
-    if command == device_commands.CLIC_RADAR_FREQ_F15 then
+    if command == device_commands.CLIC_RADAR_FREQ_F15 and value == 1 then
         dispatch_action(nil,Keys.iCommandPlaneChangeRadarPRF)
     end
     if command == device_commands.CLIC_RADAR_ON_OFF_F15 then

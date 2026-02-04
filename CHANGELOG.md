@@ -1,3 +1,22 @@
+# 03/02/2026 v1.1.7
+
+F-15C
+.Wired 27 new clickable controls matched to EDM connectors
+    Covers: Engine power, countermeasures (chaff/flare/single-button), jettison (weapons/tanks/emergency),
+    landing/taxi lights, HUD brightness/color, mirrors, master combat mode, nav modes, waypoint,
+    altimeter, emergency brakes, fuel dump/probe/qty, RWR mode+volume, takeoff trim, radar PRF,
+    radar mode/EL/range/AZ scan
+.Fixed 6 element connector names that did not match EDM
+    Renamed: RADAR_MODE_SEL, RADAR_AZ_SCAN, RADAR_EL_SCAN, RADAR_RANGE, RADAR_POWER, TMB_FUEL_OPEN/CLOSE
+.Commented out 6 dead elements (connectors not on EDM, to be revisited)
+    EXT_LT_POSITION, EXT_LT_FORMATION, TMB_MISC_TAXI-LIGHT, TMB_EXT-LT_ANTI-COLLISION, INTERIOR_FLT-INST, RADAR_SPL-MODE
+.Fixed taxi light animation chain
+    Re-routed PNT_LANDING_LIGHTS to LIGHT_CONTROL device, updated light_control.lua connector references
+.Fixed double-fire on toggle commands
+    Added value==1 guards to CLIC_HUD_COLOR_F15, CLIC_RADAR_FREQ_F15, CLIC_RADAR_POWER
+.Fixed takeoff trim value mismatch
+    CLIC_TAKEOFFTRIMF15 handler now checks value==-1 (matching default_2_position_tumb output)
+
 # 23/04/2023 v1.1.1e-beta
 
 Removed the popup

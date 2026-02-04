@@ -86,7 +86,7 @@ function SetCommand(command,value)
                             dispatch_action(nil,Keys.iCommandPlaneModeBore)
         end
     end
-    if                      command     ==  device_commands.CLIC_RADAR_POWER                        then
+    if                      command     ==  device_commands.CLIC_RADAR_POWER                        and value == 1  then
                             dispatch_action(nil,Keys.iCommandPlaneRadarOnOff)
     end
     -- Keyboard sync: track radar on/off state

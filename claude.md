@@ -87,7 +87,7 @@ State-driven animation logic for exterior and interior lights:
 - **Nav light flash**: When `LIGHT_POS == 7`, toggles draw args 190/191/192 on a 1.5s cycle (0.5s on, 1.0s off). For positions 0–6, sets static intensity (value/10).
 - **Collision light flash**: When `LIGHT_ANTICOL == 1`, pulses draw arg 199 on a 1.0s cycle (narrow 0.1s pulse between 0.5–0.6s mark).
 - **Formation light**: Writes `LIGHT_FORM` value directly to draw arg 88 every frame.
-- **Taxi light sync**: Reads base cockpit draw args 208 (landing) and 209 (taxi) each frame, writes to `MISC_TAXI_LIGHT` param so the TMB_MISC_TAXI-LIGHT element stays in sync.
+- **Taxi light sync**: Reads base cockpit draw args 208 (landing) and 209 (taxi) each frame, writes to `MISC_TAXI_LIGHT` param so the `PNT_LANDING_LIGHTS` element stays in sync. The connector reference in light_control.lua must match the element key in clickabledata.lua (currently `PNT_LANDING_LIGHTS`).
 - **Cockpit illumination**: Routes `LIGHT_COCKPIT` and `_409` commands through to the cockpit light element.
 - Hot start initializes anti-collision flash on and position lights at intensity 5.
 
@@ -159,6 +159,31 @@ Each element specifies which device receives its commands:
 - `device_commands.CLIC_RADAR_SPL_MODE` etc. — radar commands (handled by radar_control.lua)
 - `Keys.*` — native DCS commands dispatched via `dispatch_action()`
 
+### Extracting Connector Names from EDM
+The EDM is a binary file. Connector names are embedded as plain strings and can be extracted:
+```bash
+strings Shapes/F-15C-CLICKABLE.edm | grep "^PNT_\|^EXT_\|^TMB_\|^RADAR_\|^ENG_\|^INTERIOR_"
+```
+The element key in `clickabledata.lua` must exactly match one of these connector names. Mismatches are silent — DCS simply ignores the element with no error.
+
+### Common Pitfalls
+- **`default_button` fires twice**: It sends the same command on press (value=1) and release (value=0). Toggle handlers must guard with `and value == 1`, otherwise they double-fire.
+- **`default_2_position_tumb` sends {-1, 1}**, not {0, 1}. Handlers must check `value == -1` for the "off" position, not `value == 0`.
+- **Connector name ≠ handler variable name**: The element key in clickabledata.lua is what DCS looks up on the EDM. Internal variable names in handlers are irrelevant to wiring.
+- **light_control.lua connector references**: Three-step pattern — declare `connector["NAME"] = nil`, get reference in `post_initialize()`, call `:update()` in `update()`. The NAME must match the clickabledata.lua element key exactly.
+- **Rotary knob patterns differ**: Radar rotaries (PNT_RADAR_MODE, EL, RANGE) use `rotvalue` gain (~0.667), relative=false, and handlers check value==0/1 at endpoints. Other rotaries (HUD_BRT, MODE_F15, WAYPOINT, ALTIMETER, RADAR_AZ) use gain=100/15, relative=true, and handlers check value>0 / value<0.
+
+---
+
+## Commented-Out / Deferred Elements
+Six elements in clickabledata.lua are commented out because their connector names do not exist on the current EDM. They have handlers in light_control.lua / clickable.lua but cannot be wired until the EDM is updated:
+- `EXT_LT_POSITION` — Position lights rotary
+- `EXT_LT_FORMATION` — Formation lights rotary
+- `TMB_MISC_TAXI-LIGHT` — Taxi light toggle (superseded by PNT_LANDING_LIGHTS)
+- `TMB_EXT-LT_ANTI-COLLISION` — Anti-collision light toggle
+- `INTERIOR_FLT-INST` — Cockpit illumination rotary
+- `RADAR_SPL-MODE` — Radar special mode rotary
+
 ---
 
 ## Development Workflow
@@ -186,25 +211,17 @@ Each element specifies which device receives its commands:
 
 ---
 
-## Current Features
-- 30+ clickable cockpit controls
-- Navigation lights with intensity (0–6) and flash (7) modes
-- Anti-collision light flash (pulsing)
-- Formation light intensity control
-- Landing/taxi light with base cockpit lever sync
-- Cockpit illumination
-- Radar mode/power/SPL tracking with keyboard sync
-- Radar EL scan with auto-stop, AZ scan area, range zoom
-- Countermeasures (Chaff/Flare/Snar)
-- Autopilot/CAS controls (Altitude Hold, Attitude Hold, Yaw/Roll/Pitch)
-- Flight surface controls (Flaps, Airbrake, Trim)
-- Engine start/stop (L/R)
-- Weapon and targeting systems (fire, pickle, lock, station select, jettison)
-- Fuel quantity indicator (test + selector)
-- Air refuel port toggle
-- Master combat mode selector (BVR/VS/Bore/FI0)
-- HUD brightness/color/filter
-- RWR mode and volume
-- Bingo fuel index
-- Waypoint cycling
-- Altimeter pressure adjustment
+## Current Features (v1.1.7)
+All controls below are wired to EDM connectors and active:
+- **Engine**: Start/stop L/R, power on/off, cutoff L/R
+- **Flight surfaces**: Flaps, airbrake, trim (L/R/U/D), takeoff trim
+- **Weapons & targeting**: Fire/pickle, station select, target lock/unlock, target designator (L/R/U/D), jettison (weapons, tanks, emergency)
+- **Countermeasures**: Chaff, flare, single-button release (F-15C), ECM/JAM
+- **Lights**: Nav lights toggle, landing/taxi lights (with lever sync), anti-collision flash, formation intensity, cockpit illumination
+- **Radar**: On/off, master mode select (BVR/VS/Bore), PRF, EL scan (auto-stop), AZ scan area, range zoom, SPL/Flood mode
+- **Autopilot/CAS**: Altitude hold, attitude hold, yaw/roll/pitch augmentation
+- **HUD**: Brightness, color toggle
+- **Instruments**: Altimeter pressure, elapsed clock reset, bingo fuel index
+- **Navigation**: Nav mode, waypoint selector
+- **Fuel**: Dump on/off, refueling port toggle, quantity test/selector
+- **Misc**: Mirrors, RWR mode+volume, emergency brakes, canopy, eject, master combat mode selector

@@ -16,7 +16,7 @@ local   MISC_TAXI_LIGHT         =   get_param_handle("MISC_TAXI_LIGHT")
 --------------------------------------------------------------------
 --  Update Connectors Position              Step 1/3
 local   connector = {}
-connector["TMB_MISC_TAXI-LIGHT"]= nil
+connector["PNT_LANDING_LIGHTS"] = nil
 --------------------------------------------------------------------
 --  Variables Declaration
 local   n_flash_stat            =   0       --  0:Off   1:Flashing
@@ -35,7 +35,7 @@ function post_initialize()
 	local birth = LockOn_Options.init_conditions.birth_place
 --------------------------------------------------------------------------------------------------------
 --  Update Connectors Position              Step 2/3
-    connector["TMB_MISC_TAXI-LIGHT"] 			= get_clickable_element_reference("TMB_MISC_TAXI-LIGHT")
+    connector["PNT_LANDING_LIGHTS"] 			= get_clickable_element_reference("PNT_LANDING_LIGHTS")
 --------------------------------------------------------------------------------------------------------
 
     if birth=="GROUND_HOT" or birth=="AIR_HOT" then
@@ -131,8 +131,8 @@ function update()
     end
 --------------------------------------------------------------------
 --  Update Connectors Position              Step 3/3
-    if  connector["TMB_MISC_TAXI-LIGHT"]	then
-		connector["TMB_MISC_TAXI-LIGHT"]:update()
+    if  connector["PNT_LANDING_LIGHTS"]	then
+		connector["PNT_LANDING_LIGHTS"]:update()
 	end
 --------------------------------------------------------------------
 --  Navigation lights flash logic
